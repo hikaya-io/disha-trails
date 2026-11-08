@@ -1,0 +1,86 @@
+{
+    "campsite": {
+        "x": 0,
+        "y": 0,
+        "width": 48,
+        "height": 48,
+        "pixelRatio": 2
+    },
+    "hut": {
+        "x": 48,
+        "y": 0,
+        "width": 48,
+        "height": 48,
+        "pixelRatio": 2
+    },
+    "information": {
+        "x": 0,
+        "y": 48,
+        "width": 48,
+        "height": 48,
+        "pixelRatio": 2
+    },
+    "parking": {
+        "x": 48,
+        "y": 48,
+        "width": 48,
+        "height": 48,
+        "pixelRatio": 2
+    },
+    "peak": {
+        "x": 96,
+        "y": 0,
+        "width": 48,
+        "height": 48,
+        "pixelRatio": 2
+    },
+    "picnic": {
+        "x": 144,
+        "y": 0,
+        "width": 48,
+        "height": 48,
+        "pixelRatio": 2
+    },
+    "shelter": {
+        "x": 96,
+        "y": 48,
+        "width": 48,
+        "height": 48,
+        "pixelRatio": 2
+    },
+    "spring": {
+        "x": 144,
+        "y": 48,
+        "width": 48,
+        "height": 48,
+        "pixelRatio": 2
+    },
+    "toilet": {
+        "x": 0,
+        "y": 96,
+        "width": 48,
+        "height": 48,
+        "pixelRatio": 2
+    },
+    "trailhead": {
+        "x": 48,
+        "y": 96,
+        "width": 48,
+        "height": 48,
+        "pixelRatio": 2
+    },
+    "viewpoint": {
+        "x": 96,
+        "y": 96,
+        "width": 48,
+        "height": 48,
+        "pixelRatio": 2
+    },
+    "water": {
+        "x": 144,
+        "y": 96,
+        "width": 48,
+        "height": 48,
+        "pixelRatio": 2
+    }
+}

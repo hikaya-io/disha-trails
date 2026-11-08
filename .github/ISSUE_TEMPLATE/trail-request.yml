@@ -1,21 +1,23 @@
 name: Trail request
-description: Ask for offline maps or a curated guide for a trail. Upvote existing requests with 👍.
+description: Ask for a trail, its offline map or its guide. Add 👍 to an existing request instead.
 title: "Trail request: <trail name> [<trail-id>]"
 labels: [trail-request]
 body:
   - type: markdown
     attributes:
       value: |
-        Check the [coverage dashboard](https://andrewtpham.github.io/disha-trails/) first. If the
-        trail already has a request, add a 👍 to that issue instead of opening a new one. Votes
-        help decide what gets built next.
+        One request per trail. If the trail already has one, add a 👍 to that issue instead of
+        opening a new one: votes decide what is built next, and they only count in one place.
+
+        Keep the `[trail-id]` in the title: it links this request to the trail's page.
   - type: dropdown
     id: want
     attributes:
-      label: What would you like?
+      label: What matters most to you?
+      description: A guide always comes with its offline map.
       options:
-        - Offline maps along the trail
         - A curated Disha guide
+        - Offline maps along the trail
         - Both
     validations:
       required: true

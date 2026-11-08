@@ -1,0 +1,25 @@
+import { pageMetadata } from '@/lib/metadata'
+import { TRAIL_REQUEST_URL, TRAIL_REQUESTS_URL } from '@/lib/site'
+
+export const metadata = pageMetadata('/docs/requests/')
+
+# Request a trail
+
+Disha's maps and guides are built in the order people ask for them. Requests and votes are issues on GitHub, so you need a free GitHub account.
+
+## How requests work
+
+- **One request per trail.** It covers the trail's map and its guide, so every vote for the trail counts in one place. The form asks which part matters most to you.
+- **A vote is a 👍** on the request. Votes are counted once a day.
+- **The most-voted are shortlisted** for the next batch of maps and guides, and show as *shortlisted* or *coming soon*.
+
+## Request or vote
+
+1. Find the trail on the [trails](/trails/) or [maps](/maps/) page.
+2. If it shows a vote count, open it and add a 👍.
+3. If it shows **Request**, choose it to open a request with the trail filled in.
+4. If it isn't listed, <a href={TRAIL_REQUEST_URL}>open a trail request</a>. A GPX file or an OpenStreetMap link helps most.
+
+See <a href={TRAIL_REQUESTS_URL}>every open request on GitHub</a>.
+
+<DocsSeo path="/docs/requests/" />

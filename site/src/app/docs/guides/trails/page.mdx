@@ -1,0 +1,24 @@
+import { pageMetadata } from '@/lib/metadata'
+import { StatusTable } from '@/components/coverage/StatusTable'
+
+export const metadata = pageMetadata('/docs/guides/trails/')
+
+# Which trails have guides
+
+The [trails page](/trails/) lists every trail guide, from the ones in the app to the ones people have asked for. It opens on the guides you can install and the ones coming soon; the status filters bring in the rest.
+
+## Guide status
+
+<StatusTable kind="guide" />
+
+A guide always comes with its offline map. A trail can have a map without a guide: the map has the paths, contours and hillshade, and a guide adds the water, huts and campsites along the route, with the distance to each. Trails with only a map are on the [maps page](/maps/), and [Where maps are available](/docs/offline-maps/coverage/#map-status) explains the map tags.
+
+## On a trail's page
+
+A trail's page shows its length, download size, map and guide status, and its route on OpenStreetMap. Its main button is what you can do next: request the guide or map it's missing, or suggest an edit once its guide is published.
+
+## Missing a trail?
+
+[Request a trail](/docs/requests/). Votes decide which guides are made next.
+
+<DocsSeo path="/docs/guides/trails/" />
