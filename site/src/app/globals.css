@@ -251,28 +251,9 @@ body {
 }
 
 /*
- * MapLibre's own chrome, made to match: square, solid, mono. The attribution stays visible, as the
- * OpenStreetMap license asks.
+ * MapLibre's own chrome, made to match: mono. The map hides its attribution control; map credits
+ * are in the footer on every page.
  */
 .maplibregl-map {
   font-family: var(--font-mono);
-}
-
-.maplibregl-ctrl-attrib {
-  background: color-mix(in srgb, var(--bg) 85%, transparent) !important;
-  color: var(--muted) !important;
-  font-size: 11px;
-}
-
-.maplibregl-ctrl-attrib a {
-  color: var(--ink) !important;
-  text-decoration: underline;
-}
-
-.maplibregl-ctrl-attrib-button {
-  background-color: transparent !important;
-}
-
-.dark .maplibregl-ctrl-attrib-button {
-  filter: invert(1);
 }

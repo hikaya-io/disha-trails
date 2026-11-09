@@ -163,8 +163,6 @@ export function guideBadge(guide: string): Badge {
  */
 export type Stage = 'available' | 'shortlisted' | 'popular'
 
-export const STAGES: Stage[] = ['available', 'shortlisted', 'popular']
-
 /** Where an offline map is in the funnel. Partial maps count as available: some cells download. */
 export function mapStage(status: MapStatus): Stage {
   if (status === 'live' || status === 'partial') return 'available'

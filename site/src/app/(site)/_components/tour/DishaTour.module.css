@@ -78,10 +78,6 @@
 /* Plan ahead: the map stays full-size while the sheet floats up over it, then zooms
    into the A-to-B climb. Resting state (no animation) is the zoomed climb, which is
    the slide's summary. */
-.pullback {
-  transform: translate(60px, 0) scale(0.7);
-}
-
 .zoom {
   transform: var(--zoom);
 }
@@ -112,11 +108,6 @@
   .run .grow,
   .run .growRight {
     animation: grow var(--dur, 1.6s) ease-out both;
-    animation-delay: var(--d, 0s);
-  }
-
-  .run .pullback {
-    animation: pullback 1s ease-in-out both;
     animation-delay: var(--d, 0s);
   }
 
@@ -267,12 +258,6 @@
 
   to {
     transform: translateX(var(--dx));
-  }
-}
-
-@keyframes pullback {
-  from {
-    transform: none;
   }
 }
 

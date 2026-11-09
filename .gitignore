@@ -1,0 +1,7 @@
+# macOS
+.DS_Store
+
+# Dependencies and env files, at any depth (site/ has its own .gitignore too)
+node_modules/
+.env
+.env*.local

@@ -68,7 +68,7 @@ export default function ProductPage() {
             Seasonal conditions, water points and points of interest will be open to view and add to
             on the web, without the app. Reports are voted up or down, and older comments are rolled
             into a short summary at the end of each season.{' '}
-            <Link href="/trails/#open-trail-data">Read how the open trail data works.</Link>
+            <Link href="/docs/open-data/">Read how the open trail data works.</Link>
           </p>
 
           <h2>Which routes</h2>

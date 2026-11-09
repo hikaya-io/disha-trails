@@ -37,10 +37,7 @@ export default function TrailsPage() {
 
         <p className="mt-12 max-w-2xl text-[13px] text-muted">
           Guide data is open and built on OpenStreetMap.{' '}
-          <Link
-            href="/docs/guides/#open-trail-data"
-            className="text-ink underline hover:text-ink-soft"
-          >
+          <Link href="/docs/open-data/" className="text-ink underline hover:text-ink-soft">
             How it works
           </Link>
         </p>

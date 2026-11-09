@@ -1,10 +1,9 @@
-import { existsSync } from 'node:fs'
-import { join } from 'node:path'
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { JsonLd } from '@/components/JsonLd'
 import { PageTop } from '@/components/PageTop'
 import { loadCoverageForBuild } from '@/lib/coverage-build'
+import { routeIds } from '@/lib/route-files'
 import { splitTrailName, trailDescription, trailHref } from '@/lib/coverage'
 import { absoluteUrl, SITE_NAME } from '@/lib/site'
 import { TrailDetail } from './_components/TrailDetail'
@@ -45,11 +44,6 @@ export async function generateMetadata({
   }
 }
 
-/** Whether scripts/build-trail-routes.mjs wrote a route and elevation profile for the trail. */
-function hasRoute(id: string): boolean {
-  return existsSync(join(process.cwd(), 'public/routes', `${id}.json`))
-}
-
 export default async function TrailPage({ params }: { params: Promise<{ id: string }> }) {
   const { trail, data } = await findTrail(params)
   const url = absoluteUrl(trailHref(trail.id))
@@ -66,7 +60,7 @@ export default async function TrailPage({ params }: { params: Promise<{ id: stri
       />
       <TrailDetail
         initial={trail}
-        hasRoute={hasRoute(trail.id)}
+        hasRoute={routeIds().includes(trail.id)}
         header={
           <PageTop
             crumbs={[
