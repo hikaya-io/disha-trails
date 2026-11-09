@@ -1,0 +1,101 @@
+# Builds site/ as a static export and deploys it to GitHub Pages, with the latest coverage.json
+# from the coverage-data branch (pushed daily by disha-tiles) copied into the export.
+#
+# A push to coverage-data can't start this workflow: GitHub reads a push's workflows from the
+# pushed commit, and that branch holds only the data files. disha-tiles sends a repository_dispatch
+# (event type coverage-updated) after it pushes instead; it runs this file from main.
+name: Deploy site
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'site/**'
+      - '.github/workflows/deploy-site.yml'
+  repository_dispatch:
+    types: [coverage-updated]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# One deploy at a time; a newer run replaces a queued one, but a running deploy finishes.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: site
+    env:
+      # The site's address with any base path. Set the repo variable for a custom domain.
+      NEXT_PUBLIC_SITE_URL: ${{ vars.NEXT_PUBLIC_SITE_URL || 'https://hikaya-io.github.io/disha-trails' }}
+      NEXT_PUBLIC_CONTACT_API_URL: ${{ vars.NEXT_PUBLIC_CONTACT_API_URL }}
+      NEXT_PUBLIC_TURNSTILE_SITE_KEY: ${{ vars.NEXT_PUBLIC_TURNSTILE_SITE_KEY }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: main
+
+      - name: Get coverage data
+        run: |
+          git fetch --depth=1 origin +refs/heads/coverage-data:refs/remotes/origin/coverage-data || {
+            echo "::error::No coverage-data branch. disha-tiles' coverage workflow publishes it."
+            exit 1
+          }
+          for file in coverage.json index.html; do
+            git cat-file -e "origin/coverage-data:$file" || {
+              echo "::error::coverage-data has no $file."
+              exit 1
+            }
+          done
+          git show origin/coverage-data:coverage.json > public/coverage.json
+          git show origin/coverage-data:index.html > "$RUNNER_TEMP/coverage-dashboard.html"
+
+      # The base path is the site URL's path: /disha-trails on github.io, empty on a custom domain.
+      - name: Set base path
+        run: |
+          case "$NEXT_PUBLIC_SITE_URL" in
+            https://*|http://*) ;;
+            *) echo "::error::NEXT_PUBLIC_SITE_URL must start with https:// (got '$NEXT_PUBLIC_SITE_URL')."; exit 1 ;;
+          esac
+          base_path=$(printf '%s' "$NEXT_PUBLIC_SITE_URL" | sed -E 's#^https?://[^/]+##; s#/+$##')
+          echo "NEXT_PUBLIC_BASE_PATH=$base_path" >> "$GITHUB_ENV"
+          echo "Base path: '${base_path}'"
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: yarn
+          cache-dependency-path: site/yarn.lock
+
+      - run: yarn install --frozen-lockfile
+      - run: yarn lint
+      - run: yarn test
+      - run: yarn build
+
+      # The old standalone dashboard stays reachable at /coverage/. It is self-contained (the data
+      # is inlined, no root-relative links), so it needs no rewriting.
+      - name: Add coverage dashboard
+        run: |
+          mkdir -p out/coverage
+          cp "$RUNNER_TEMP/coverage-dashboard.html" out/coverage/index.html
+
+      - uses: actions/upload-pages-artifact@v5
+        with:
+          path: site/out
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v5

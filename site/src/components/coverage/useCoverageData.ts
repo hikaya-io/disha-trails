@@ -1,18 +1,22 @@
 'use client'
 import { useEffect, useState } from 'react'
 import { type CoverageData, parseCoverage } from '@/lib/coverage'
-import { COVERAGE_DATA_URL } from '@/lib/site'
+import { COVERAGE_DATA_URL, publicPath } from '@/lib/site'
 
 export type CoverageState =
   | { status: 'loading' }
   | { status: 'error'; message: string }
   | { status: 'ready'; data: CoverageData }
 
+// The site's own copy, with the base path, unless an override points elsewhere.
+const url = COVERAGE_DATA_URL.startsWith('/') ? publicPath(COVERAGE_DATA_URL) : COVERAGE_DATA_URL
+
 // One request per page view, shared by every section that reads the data.
 let request: Promise<CoverageData> | null = null
 
 function loadCoverage(): Promise<CoverageData> {
-  request ??= fetch(COVERAGE_DATA_URL)
+  // no-cache revalidates with the server, so a page sees the day's file without a hard reload.
+  request ??= fetch(url, { cache: 'no-cache' })
     .then((res) => {
       if (!res.ok) throw new Error(`coverage.json returned ${res.status}`)
       return res.json()
@@ -36,7 +40,7 @@ export function useCoverageData(): CoverageState {
       .catch((error: Error) => {
         // Non-critical: the section shows its own error line. A warning, because Next's dev
         // overlay treats console.error as a crash.
-        console.warn(`Coverage data from ${COVERAGE_DATA_URL} didn't load:`, error.message)
+        console.warn(`Coverage data from ${url} didn't load:`, error.message)
         if (live) setState({ status: 'error', message: error.message })
       })
     return () => {

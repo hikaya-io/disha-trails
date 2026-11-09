@@ -11,13 +11,21 @@ let request: Promise<CoverageData> | null = null
  * status stay current between builds. A trail added to the data shows on /trails/ right away and
  * gets its own page on the next build.
  *
- * A local address such as /coverage-local.json is read from public/, so a build works offline.
+ * A local address, the default /coverage.json or /coverage-local.json, is read from public/, so a
+ * build works offline. The deploy workflow puts the latest file there; locally, download it first
+ * (see the README).
  */
 export function loadCoverageForBuild(): Promise<CoverageData> {
   request ??= (async () => {
     let json: unknown
     if (COVERAGE_DATA_URL.startsWith('/')) {
-      json = JSON.parse(await readFile(join(process.cwd(), 'public', COVERAGE_DATA_URL), 'utf8'))
+      const file = join(process.cwd(), 'public', COVERAGE_DATA_URL)
+      const text = await readFile(file, 'utf8').catch(() => {
+        throw new Error(
+          `${file} is missing. Download coverage.json into public/ (see the README), or set NEXT_PUBLIC_COVERAGE_DATA_URL.`,
+        )
+      })
+      json = JSON.parse(text)
     } else {
       const res = await fetch(COVERAGE_DATA_URL)
       if (!res.ok) throw new Error(`${COVERAGE_DATA_URL} returned ${res.status}`)

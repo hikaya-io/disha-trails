@@ -7,10 +7,10 @@ Trail routes and boundary data for maps. The GPX files are free to download. See
 Disha's offline maps and guides grow by request. Everything runs on GitHub issues, with two
 templates and nothing else:
 
-- **[Trail request](https://github.com/andrewtpham/disha-trails/issues/new?template=trail-request.yml)**
+- **[Trail request](https://github.com/hikaya-io/disha-trails/issues/new?template=trail-request.yml)**
   (`trail-request`): a trail with no map or guide yet. One request per trail, so its votes stay in
   one place. A vote is a 👍; the daily build counts them, and the most-voted are built next.
-- **[Trail edit](https://github.com/andrewtpham/disha-trails/issues/new?template=trail-edit.yml)**
+- **[Trail edit](https://github.com/hikaya-io/disha-trails/issues/new?template=trail-edit.yml)**
   (`trail-edit`): something wrong on a published guide, such as a dry spring, a closed hut, a
   reroute or a wrong distance. A 👍 confirms it.
 
@@ -19,20 +19,21 @@ those forms; what a button is about goes in the title, such as `Trail edit (rout
 link can always prefill the title but not a dropdown. Add a topic, never a new template or label.
 The `trail-edit` label has to exist in the repo for the template to apply it.
 
-`coverage.json` is rebuilt daily and published to the `gh-pages` branch from the private
-disha-tiles repo; don't edit that branch by hand. It carries guide statuses only when that repo
-has a `DISHA_GUIDES_TOKEN` secret (read access to disha-guides); without it, `/trails/` is empty.
-The standalone dashboard at the `gh-pages` root goes away once the site is live.
+`coverage.json` is rebuilt daily in the private disha-tiles repo and pushed, with the old
+standalone dashboard (`index.html`), to the root of this repo's `coverage-data` branch; don't edit
+that branch by hand. It carries guide statuses only when disha-tiles has a `DISHA_GUIDES_TOKEN`
+secret (read access to disha-guides); without it, `/trails/` is empty.
 
 ## Marketing site
 
 `site/` holds the public Disha site (Next.js, MDX, static export, yarn). From `site/`:
 
-- `yarn dev` runs it locally.
-- `yarn lint`, `yarn test` and `yarn build` are the checks. A production build needs `NEXT_PUBLIC_SITE_URL`; see `site/.env.example`. While `yarn dev` is running, check a build with `NEXT_DIST_DIR=.next-check yarn build`: a build into `.next` overwrites the files the dev server serves and breaks it until it restarts. That build exports into `.next-check/`, not `out/`, so use a plain `yarn build` for the files you deploy.
+- `yarn dev` runs it locally. The site reads its own `public/coverage.json` (gitignored), so download it first: `curl -o public/coverage.json https://hikaya-io.github.io/disha-trails/coverage.json`. Or set `NEXT_PUBLIC_COVERAGE_DATA_URL` to that URL in `.env.local` to read the live file instead.
+- `yarn lint`, `yarn test` and `yarn build` are the checks. A production build needs `NEXT_PUBLIC_SITE_URL`; see `site/.env.example`. While `yarn dev` is running, check a build with `NEXT_DIST_DIR=.next-check yarn build`: a build into `.next` overwrites the files the dev server serves and breaks it until it restarts. That build exports into `.next-check/`, not `out/`.
+- To check a build under the GitHub Pages path, build with `NEXT_PUBLIC_SITE_URL=https://hikaya-io.github.io/disha-trails NEXT_PUBLIC_BASE_PATH=/disha-trails`, copy the export into `<tmp>/disha-trails/` and serve `<tmp>` with `python3 -m http.server`.
 - Every page is registered in `site/src/lib/pages.ts`, which feeds the sitemap and metadata. A draft page is noindex and left out of the sitemap.
 - The waitlist posts to the `hikaya-contact-form` Worker in website-2.0 (`POST /waitlist/disha`).
-- `/trails/[id]/` is one page per trail, generated at build time from `coverage.json` (a build needs network, or `NEXT_PUBLIC_COVERAGE_DATA_URL=/coverage-local.json`). A trail added to the data shows on `/trails/` at once and gets its page on the next build.
+- `/trails/[id]/` is one page per trail, generated at build time from `coverage.json` (from `public/coverage.json`, or wherever `NEXT_PUBLIC_COVERAGE_DATA_URL` points). A trail added to the data shows on `/trails/` at once and gets its page on the next build.
 - **One grid.** Every square and line on the maps comes from the map cells, which are z10 web map tiles (`c-10-x-y`), the unit disha-tiles builds and publishes. Zoomed out, the squares are the cells' z8 parents (4 × 4 cells); a city's dashed outline is the edge of its cells (`cellsBounds` in `src/lib/coverage-geo.ts`), never its raw 40 km box. Don't draw anything from a place's own box or from degrees: it won't line up. Tests in `tests/coverage.test.ts` check this.
 - **Trails and maps.** `/trails/` lists curated guides, `/maps/` where offline maps download. Both use one table (`src/components/coverage/CatalogTable.tsx`): search, multi-select status chips in the tags' colors, sort, 25 rows a page, status on the right. Trails opens on available and coming-soon guides, Maps on available and partial maps; the other chips hold the rest of the funnel (`mapStage`, `guideStage` and the badge helpers in `src/lib/coverage.ts`). Trails with a map and no guide row are only on `/maps/`.
 - **Maps page.** A trail's name opens its page; a row's map button sets `/maps/?trail=` or `?city=`, which names the selection in a bar above the map, highlights the row and zooms to it. A selected trail with a route file (see Routes) draws its line.
@@ -45,7 +46,23 @@ The standalone dashboard at the `gh-pages` root goes away once the site is live.
 - The map buttons (`src/components/coverage/MapControls.tsx`) are me's set: layers, fullscreen and km/mi on the left, zoom and zoom-to-fit on the right. km/mi shows only on a trail with a route.
 - **Trail page layout.** As on andrewpham.dev's trail stories: from `lg`, the title and facts in the left half and the map in the right half, flush to the window, the screen's height under the sticky header and staying put while the text scrolls (`TrailDetail.tsx`; the 60px header height is a constant there). On phones the map runs edge to edge under the text.
 - **Routes and elevation.** A trail page draws the trail's route with a frosted elevation chart over the bottom of the map (`ElevationChart.tsx`, ported from me's), the two linked: pointing at either marks the same spot on both. The data is `public/routes/<id>.json`, written by `node scripts/build-trail-routes.mjs` (committed; the site build doesn't run it). Its line is the trail's disha-guides corridor (`out/corridors/`, from a sibling `disha-guides` checkout) and its heights are read from the published terrain cells, the model behind the hillshade. Rerun it when corridors are added or more cells are built; a trail without a corridor, or with too little built terrain, gets no file and keeps the cells' route on the map. 11 trails had one on 2026-11-08. Pages learn which trails have a file at build time (`src/lib/route-files.ts`), so they never fetch a missing one.
-- `/maps/` and `/trails/` fetch `coverage.json` from GitHub Pages in the browser, so they show new data without a rebuild. To preview other data, put a copy at `public/coverage-local.json` (gitignored) and set `NEXT_PUBLIC_COVERAGE_DATA_URL=/coverage-local.json`.
+- `/maps/` and `/trails/` also fetch the site's `/coverage.json` in the browser (revalidating, so a new deploy's file shows without a hard reload). To preview other data, put a copy at `public/coverage-local.json` (gitignored) and set `NEXT_PUBLIC_COVERAGE_DATA_URL=/coverage-local.json`.
+- **Base path.** On `hikaya-io.github.io` the site lives under `/disha-trails`, set by `NEXT_PUBLIC_BASE_PATH` (Next's `basePath`). `next/link` and the router add it; anything else that loads a file from `public/` (fetches, map styles, images) goes through `publicPath()` in `src/lib/site.ts`.
+
+### Deploy
+
+`.github/workflows/deploy-site.yml` builds `site/` and deploys it to GitHub Pages. It runs on a push to `main` that touches `site/` or the workflow, on a `repository_dispatch` of type `coverage-updated`, and by hand (**Actions** › **Deploy site** › **Run workflow**). Each run:
+
+1. checks out `main` and copies `coverage.json` from the `coverage-data` branch into `site/public/`, failing if the branch or file is missing;
+2. runs `yarn lint`, `yarn test` and `yarn build`, with `NEXT_PUBLIC_SITE_URL` from the repo variable of that name (default `https://hikaya-io.github.io/disha-trails`) and `NEXT_PUBLIC_BASE_PATH` taken from that URL's path (`/disha-trails`, or empty on a custom domain);
+3. copies the branch's dashboard `index.html` to `/coverage/` in the export (it is self-contained, so it needs no rewriting) and deploys the export.
+
+A push to `coverage-data` doesn't start the workflow: GitHub reads a push's workflows from the pushed commit, and that branch holds only the data. So disha-tiles sends the `coverage-updated` dispatch after each push, with the same `DISHA_TRAILS_TOKEN` PAT it pushes with (`gh api repos/hikaya-io/disha-trails/dispatches -f event_type=coverage-updated`). The default `GITHUB_TOKEN` couldn't do either: its pushes and dispatches don't start other workflows.
+
+Repo settings it needs:
+
+- **Settings** › **Pages** › **Source**: GitHub Actions.
+- Repo variables (**Settings** › **Secrets and variables** › **Actions** › **Variables**), all optional: `NEXT_PUBLIC_SITE_URL` once a custom domain is live, and `NEXT_PUBLIC_CONTACT_API_URL` and `NEXT_PUBLIC_TURNSTILE_SITE_KEY` for the waitlist (public values, the same as website-2.0's).
 
 ## Project structure
 
@@ -75,7 +92,7 @@ disha-trails/
 Open a file on GitHub and click **Download raw file**. To link to a file or load it in code, use its raw URL:
 
 ```
-https://raw.githubusercontent.com/andrewtpham/disha-trails/refs/heads/main/trails/gr20-corsica-2024.gpx
+https://raw.githubusercontent.com/hikaya-io/disha-trails/refs/heads/main/trails/gr20-corsica-2024.gpx
 ```
 
 The NPS boundary file is stored in Git LFS, so its raw URL returns a pointer. Download it from the GitHub page instead.

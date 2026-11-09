@@ -1,6 +1,7 @@
 import clsx from 'clsx'
 import { preload } from 'react-dom'
 
+import { publicPath } from '@/lib/site'
 import { formatDuration, pathPoints, pointAtShare, segmentStats } from '@/lib/trail-geometry'
 import { colMap as map } from './disha-col-map'
 import styles from './DishaTour.module.css'
@@ -90,7 +91,7 @@ const body = { fontSize: 9.5, fill: MUTED }
 
 export function HeroTrail() {
   // The base map is most of what the hero shows. Start fetching it with the HTML.
-  preload(map.base, { as: 'image', fetchPriority: 'high' })
+  preload(publicPath(map.base), { as: 'image', fetchPriority: 'high' })
 
   return (
     <div className="mx-auto w-full max-w-sm lg:mx-0">

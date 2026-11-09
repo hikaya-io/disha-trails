@@ -14,19 +14,30 @@ export function getSiteUrl(): string {
 }
 
 /**
- * The coverage data (built daily by disha-tiles, served from the gh-pages branch of disha-trails)
- * and the trail request form. These addresses change when the repo moves from andrewtpham to the
- * hikaya-io org: update them here and in disha-tiles' coverage-map.py (REQUESTS_REPO). GitHub
- * Pages addresses are not redirected after a transfer. NEXT_PUBLIC_COVERAGE_DATA_URL points a
- * local build at another copy, such as one written by `coverage-map.py --json-out`.
+ * The path the site is served under, such as "/disha-trails" on hikaya-io.github.io, or "" at a
+ * domain root. next.config.mjs reads the same variable as Next's basePath, which next/link and the
+ * router add on their own; anything else that loads a file from public/ goes through publicPath().
  */
-export const COVERAGE_DATA_URL =
-  process.env.NEXT_PUBLIC_COVERAGE_DATA_URL ||
-  'https://andrewtpham.github.io/disha-trails/coverage.json'
+export const BASE_PATH = (process.env.NEXT_PUBLIC_BASE_PATH ?? '').replace(/\/+$/, '')
+
+/** A public/ file's URL with the base path, such as "/disha-trails/map/style-light.json". */
+export function publicPath(path: string): string {
+  return `${BASE_PATH}${path}`
+}
+
+/**
+ * The coverage data, built daily by disha-tiles. The deploy copies the latest file into the export,
+ * so the site reads its own /coverage.json. A local address is read from public/ at build time;
+ * NEXT_PUBLIC_COVERAGE_DATA_URL points a build elsewhere, such as the live file or a copy written
+ * by `coverage-map.py --json-out` at /coverage-local.json.
+ */
+export const COVERAGE_DATA_URL = process.env.NEXT_PUBLIC_COVERAGE_DATA_URL || '/coverage.json'
+
+/** The trail request form. Update disha-tiles' coverage-map.py (REQUESTS_REPO) with it. */
 export const TRAIL_REQUEST_URL =
-  'https://github.com/andrewtpham/disha-trails/issues/new?template=trail-request.yml'
+  'https://github.com/hikaya-io/disha-trails/issues/new?template=trail-request.yml'
 export const TRAIL_REQUESTS_URL =
-  'https://github.com/andrewtpham/disha-trails/issues?q=is%3Aissue+label%3Atrail-request'
+  'https://github.com/hikaya-io/disha-trails/issues?q=is%3Aissue+label%3Atrail-request'
 
 /** Absolute URL for a site path such as "/trails/". */
 export function absoluteUrl(path: string): string {

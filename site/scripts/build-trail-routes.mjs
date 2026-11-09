@@ -30,7 +30,7 @@ import {
 
 const SITE = resolve(dirname(fileURLToPath(import.meta.url)), '..')
 const TILES = 'https://tiles.hikaya.app'
-const DEFAULT_COVERAGE = 'https://andrewtpham.github.io/disha-trails/coverage.json'
+const DEFAULT_COVERAGE = 'https://hikaya-io.github.io/disha-trails/coverage.json'
 
 /** Corridors disha-guides names differently from the site's trail ids. */
 const CORRIDOR_FOR = {

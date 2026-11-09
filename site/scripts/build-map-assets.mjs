@@ -3,7 +3,7 @@
  * Copies the Disha app's own map style into public/map/, so the site's maps look like the app's.
  * Run it from site/ when the app's style changes:
  *
- *   node scripts/build-map-assets.mjs [--ios ../../disha_ios] [--me ../../me]
+ *   node scripts/build-map-assets.mjs [--ios ../../disha-ios] [--me ../../me]
  *
  * It writes the three map layers the site offers (src/lib/map/layers.ts):
  * - Terrain, public/map/style-light.json and style-dark.json: the app's disha-outdoor-osm styles
@@ -27,7 +27,7 @@ const arg = (name, fallback) => {
   const i = process.argv.indexOf(`--${name}`)
   return resolve(SITE, i > 0 ? process.argv[i + 1] : fallback)
 }
-const IOS = join(arg('ios', '../../disha_ios'), 'Disha/Resources')
+const IOS = join(arg('ios', '../../disha-ios'), 'Disha/Resources')
 const ME = join(arg('me', '../../me'), 'public/map-styles')
 const OUT = join(SITE, 'public/map')
 

@@ -1,5 +1,6 @@
 import clsx from 'clsx'
 
+import { publicPath } from '@/lib/site'
 import { colMap as map } from './disha-col-map'
 import styles from './DishaTour.module.css'
 
@@ -72,7 +73,12 @@ export function MapDefs() {
         <g id="disha-col">
           <rect x={map.baseX} width={map.baseWidth} height={map.height} fill="#e6ecdd" />
           {/* Terrain, woods, contours, water and paths: one cached file for all slides */}
-          <image href={map.base} x={map.baseX} width={map.baseWidth} height={map.height} />
+          <image
+            href={publicPath(map.base)}
+            x={map.baseX}
+            width={map.baseWidth}
+            height={map.height}
+          />
           <g style={text.place}>
             <text x={places.start.x + 12} y={places.start.y + 4}>
               Notre-Dame de la Gorge

@@ -61,7 +61,7 @@ export type CoverageData = {
   routeCells: Record<string, Bounds>
   trails: Trail[]
   cities: City[]
-  /** GitHub repo that holds trail requests, such as "andrewtpham/disha-trails". */
+  /** GitHub repo that holds trail requests, such as "hikaya-io/disha-trails". */
   repo: string
   requestLabel: string
   /** "YYYY-MM-DD". */

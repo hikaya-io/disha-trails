@@ -11,6 +11,7 @@
  * JSON is in public/map/, written by scripts/build-map-assets.mjs. OSM Classic has one look.
  */
 import type { StyleSpecification } from 'maplibre-gl'
+import { publicPath } from '@/lib/site'
 
 export type MapLayerId = 'terrain' | 'openfreemap' | 'osm'
 export type Theme = 'light' | 'dark'
@@ -21,14 +22,20 @@ export const MAP_LAYERS: ReadonlyArray<{ id: MapLayerId; label: string }> = [
   { id: 'osm', label: 'OSM Classic' },
 ]
 
-/** The style JSON for a layer in a theme, or null for OSM Classic, which is built in code. */
+/**
+ * The style JSON for a layer in a theme, as a public/ path without the base path, or null for OSM
+ * Classic, which is built in code.
+ */
 export function styleUrl(layer: MapLayerId, theme: Theme): string | null {
   if (layer === 'terrain') return `/map/style-${theme}.json`
   if (layer === 'openfreemap') return `/map/ofm-${theme}.json`
   return null
 }
 
-/** OSM Classic: OpenStreetMap's raster tiles, with the site's glyphs for the overlay labels. */
+/**
+ * OSM Classic: OpenStreetMap's raster tiles, with the site's glyphs for the overlay labels. `origin`
+ * is the site's origin with its base path.
+ */
 export function osmClassicStyle(origin: string): StyleSpecification {
   return {
     version: 8,
@@ -47,7 +54,7 @@ export function osmClassicStyle(origin: string): StyleSpecification {
 
 /**
  * The style with its relative glyph and sprite urls made absolute, since MapLibre wants full
- * urls. OpenFreeMap's style has no sprite.
+ * urls. `origin` is the site's origin with its base path. OpenFreeMap's style has no sprite.
  */
 export function absolutize(style: StyleSpecification, origin: string): StyleSpecification {
   const full = (url: string | undefined) => (url?.startsWith('/') ? `${origin}${url}` : url)
@@ -68,15 +75,16 @@ export async function loadStyle(layer: MapLayerId, theme: Theme): Promise<StyleS
 
 function fetchStyle(layer: MapLayerId, theme: Theme): Promise<StyleSpecification> {
   const url = styleUrl(layer, theme)
-  if (!url) return Promise.resolve(osmClassicStyle(location.origin))
+  const origin = location.origin + publicPath('')
+  if (!url) return Promise.resolve(osmClassicStyle(origin))
   let request = styles.get(url)
   if (!request) {
-    request = fetch(url)
+    request = fetch(publicPath(url))
       .then((res) => {
         if (!res.ok) throw new Error(`${url} returned ${res.status}`)
         return res.json() as Promise<StyleSpecification>
       })
-      .then((style) => absolutize(style, location.origin))
+      .then((style) => absolutize(style, origin))
     request.catch(() => styles.delete(url))
     styles.set(url, request)
   }

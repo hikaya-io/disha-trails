@@ -1,5 +1,6 @@
 'use client'
 import { useEffect, useState } from 'react'
+import { publicPath } from '@/lib/site'
 import type { TrailRoute } from '@/lib/trail-route'
 
 /**
@@ -12,7 +13,7 @@ export function useTrailRoute(id: string | null): TrailRoute | null {
   useEffect(() => {
     if (!id) return
     let live = true
-    fetch(`/routes/${id}.json`)
+    fetch(publicPath(`/routes/${id}.json`))
       .then((res) => (res.ok ? (res.json() as Promise<TrailRoute>) : null))
       .then((route) => live && route && setLoaded({ id, route }))
       .catch(() => {})
