@@ -121,7 +121,7 @@ Trail GPX files follow this pattern:
 | File | Why |
 |------|-----|
 | `gr20-corsica-2024.gpx` | Known abbreviation, location and year |
-| `tour-du-mont-blanc-2024.gpx` | Full name and year |
+| `tour-du-mont-blanc-2026.gpx` | Full name and year |
 | `grossglockner-ultra-trail-110k-2026.gpx` | Full name, distance (the race has several) and year |
 | `transylvania-50k-2025.gpx` | Name, distance and year |
 | `madeira-crossing-2026.gpx` | Name and year (one known route) |
@@ -139,3 +139,7 @@ trails/pct/halfmile/ca/ca-sec-a-waypoints.gpx
 ## Git LFS
 
 Only the NPS boundary file uses Git LFS (see `.gitattributes`). Commit every trail file as a plain file. A raw URL for a file in LFS serves the pointer, which breaks the maps on andrewpham.dev.
+
+## License
+
+The code in `site/` is under the [MIT license](LICENSE): copies and forks must keep its copyright notice. Trail data marked ODbL in [ATTRIBUTION.md](ATTRIBUTION.md) is under the [Open Database License](DATA-LICENSE.md). Other files keep their source's terms. Using the hosted services (`tiles.hikaya.app`, `guides.hikaya.app` and the site's `/data/trails/`) is covered by the [terms of use](https://disha.hikaya.io/terms/), which the licenses don't change.

@@ -34,7 +34,7 @@ export default async function DocsLayout({ children }: { children: React.ReactNo
         }
       >
         <header className="sticky top-0 z-30 flex h-14 items-center justify-between gap-2 border-b border-line bg-bg/80 px-4 backdrop-blur-sm sm:px-6 lg:px-8">
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1 sm:gap-2">
             <DocsMobileNavigation />
             <DocsHeaderBrand logo={<Logo />} />
           </div>

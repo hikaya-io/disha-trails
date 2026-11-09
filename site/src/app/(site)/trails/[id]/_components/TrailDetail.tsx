@@ -119,7 +119,7 @@ export function TrailDetail({
     ],
     [
       'Route',
-      <span key="route" className="flex flex-wrap items-center gap-x-3">
+      <span key="route" className="flex flex-wrap items-center gap-x-3 gap-y-1">
         {osm ? (
           <a href={osm} {...newTab} className={inlineLink}>
             OpenStreetMap ↗

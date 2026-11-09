@@ -86,7 +86,7 @@ export function SidebarHideButton() {
 export function DocsHeaderBrand({ logo }: { logo: React.ReactNode }) {
   const { collapsed, toggle } = useContext(SidebarContext)
   return (
-    <span className="flex items-center gap-3">
+    <span className="flex items-center gap-2 sm:gap-3">
       {collapsed && (
         <button
           type="button"
@@ -100,7 +100,7 @@ export function DocsHeaderBrand({ logo }: { logo: React.ReactNode }) {
           <PanelIcon />
         </button>
       )}
-      <span className={clsx('items-center gap-3', collapsed ? 'flex' : 'flex lg:hidden')}>
+      <span className={clsx('items-center gap-2 sm:gap-3', collapsed ? 'flex' : 'flex lg:hidden')}>
         {logo}
         <span aria-hidden="true" className="h-5 w-px bg-line" />
       </span>

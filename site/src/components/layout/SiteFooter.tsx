@@ -8,6 +8,7 @@ const links = [
   { href: '/docs/faq/', label: 'faq' },
   { href: '/docs/support/', label: 'help' },
   { href: '/privacy/', label: 'privacy' },
+  { href: '/terms/', label: 'terms' },
   { href: '/#waitlist', label: 'waitlist' },
 ]
 

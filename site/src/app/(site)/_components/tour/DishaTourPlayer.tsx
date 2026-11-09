@@ -169,7 +169,7 @@ export function DishaTourPlayer({
           type="button"
           onClick={toggle}
           aria-label={label}
-          className="mb-1 flex-none p-2 text-faint hover:text-ink"
+          className="-mr-1 flex size-11 flex-none items-center justify-center text-faint hover:text-ink"
         >
           {playing ? (
             <svg viewBox="0 0 20 20" aria-hidden="true" className="h-5 w-5">

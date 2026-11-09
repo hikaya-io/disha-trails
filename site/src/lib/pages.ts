@@ -121,6 +121,12 @@ export const PAGES: readonly SitePage[] = [
       'What the Disha site collects when you join the beta waitlist, who handles it, and how to get off the list.',
   },
   {
+    path: '/terms/',
+    title: 'Terms of use',
+    description:
+      'How you may use the Disha site, its map tiles, guides and trail files, which licenses cover the data, and the limits on the services.',
+  },
+  {
     path: '/routes/gr20/',
     title: 'GR20 offline map and guide for iPhone',
     description:
