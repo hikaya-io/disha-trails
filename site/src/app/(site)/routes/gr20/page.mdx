@@ -1,0 +1,51 @@
+import { GuideLayout } from '../_components/GuideLayout'
+import { pageMetadata } from '@/lib/metadata'
+
+export const metadata = pageMetadata('/routes/gr20/')
+
+export const guide = {
+  path: '/routes/gr20/',
+  heading: 'GR20 offline map and guide for iPhone',
+  lead: 'The GR20 crosses Corsica from Calenzana in the north to Conca in the south. Disha has a guide for it that works with no signal and shows the distance to the next spring, hut or campsite.',
+}
+
+export default function Layout({ children }) {
+  return <GuideLayout guide={guide}>{children}</GuideLayout>
+}
+
+{/* DRAFT. Registered with draft: true in src/lib/pages.ts, so it is noindex, not in the sitemap and not linked. Before publishing: read it through, set datePublished in `guide`, and remove draft. The first-hand facts come from the trail story at andrewpham.dev/trails/gr20-corsica. */}
+
+## The route
+
+The GR20 is a waymarked long-distance path through the mountains of Corsica. Disha's guide follows the waymarked route from OpenStreetMap, walked north to south from Calenzana to Conca, which is the usual direction. It is about 180 kilometers long.
+
+The standard itinerary is 16 days. Distance is a poor guide to time here: the trail signs give hours, and the rocky ground makes a short section take much longer than it looks.
+
+## Using Disha on the GR20
+
+- **Download the guide at home.** The map, the route line and the stops stay on your phone with no signal.
+- **Drag along the trail** to see the distance to the next spring, hut or campsite, measured from your position.
+- **Plan around the stops.** Look at where water and shelter fall before you set the day's target.
+
+The stops come from OpenStreetMap. If one is wrong, you can fix it there.
+
+## From the trail
+
+We walked the GR20 south from Calenzana to Conca in seven days in late October 2024, right after the Tour du Mont Blanc. The full account, with day-by-day notes, is in [the GR20 trail story](https://andrewpham.dev/trails/gr20-corsica).
+
+October is off-season. The refuges were open but unstaffed, so there were no meals. The campsite at Calenzana looked closed, and at Vizzavona, the only real resupply point at the midpoint, every shop was shut. We carried all our food.
+
+These are the stretches where the distance to the next water and shelter mattered most:
+
+- **Day 1, Calenzana to Refuge de Carozzu.** After the stream at Ruisseau de la Mandriaccia there was no reliable water until Carozzu. The sign for the last section said seven hours for seven kilometers, and we finished it by headlamp.
+- **Day 2, Carozzu to Refuge de Tighjettu.** Nothing on the climb toward Monte Cinto until about three kilometers into the descent on the far side.
+- **Day 4, Manganu to Vizzavona.** No water between Bocca alle Porte and Refuge de Petra Piana, so we carried enough for the whole ridgeline.
+- **Day 5, Vizzavona to Refuge di u Prati.** The ridgeline from Prati to Refuge d'Usciolu is dry and has no places to camp.
+- **Day 6, Prati to Bergerie d'Asinau.** After Bergerie l'Croci there was no water until Asinau.
+
+In late October the days were short, so we hiked after dark on five of the seven days. If you go outside June to September, carry a headlamp with spare batteries and plan days around the shelters, not around the distance.
+
+## Related
+
+- [Trails with offline maps and guides](/trails/)
+- [How the open trail data works](/docs/open-data/)

@@ -1,0 +1,9 @@
+node_modules
+.next
+.next-check
+out
+.env*.local
+*.tsbuildinfo
+next-env.d.ts
+public/coverage-local.json
+public/coverage.json

@@ -1,0 +1,24 @@
+import { pageMetadata } from '@/lib/metadata'
+import { StatusTable } from '@/components/coverage/StatusTable'
+
+export const metadata = pageMetadata('/docs/offline-maps/coverage/')
+
+# Where maps are available
+
+The [maps page](/maps/) shows every trail and city with an offline map, updated daily. Choose a row's **map** button to see it on the map, or a trail's name to open its page.
+
+## Map status
+
+<StatusTable kind="map" />
+
+**Cells** counts the map cells built along each trail or around each city. Maps download cell by cell, so a partial map works wherever its cells are built.
+
+## On the map
+
+Filled squares are map cells you can download, and dashed outlines are cells not built yet. Zoomed out, each square is 4 × 4 cells, so the squares and cells line up as you zoom in. A city's dashed outline is the edge of its cells.
+
+## Missing a place?
+
+[Request a trail](/docs/requests/). Votes decide which maps are built next.
+
+<DocsSeo path="/docs/offline-maps/coverage/" />

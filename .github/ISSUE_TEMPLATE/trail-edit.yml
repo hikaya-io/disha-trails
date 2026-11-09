@@ -1,0 +1,58 @@
+name: Trail edit
+description: Suggest an edit to a published Disha guide, such as a dry spring, a closed hut or a reroute. Add 👍 to an edit you've seen too.
+title: "Trail edit: <trail name> [<trail-id>]"
+labels: [trail-edit]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Check the trail's [open edits](https://github.com/hikaya-io/disha-trails/issues?q=is%3Aissue+is%3Aopen+label%3Atrail-edit) first.
+        If someone has reported the same thing, add a 👍 to that issue instead of opening a new
+        one. A 👍 says you've seen it too, and the most-confirmed edits are made first.
+
+        Keep the `[trail-id]` in the title: it links this edit to the trail's page.
+  - type: dropdown
+    id: kind
+    attributes:
+      label: What needs changing?
+      options:
+        - Distance or elevation is wrong
+        - Add a stop (water, hut, campsite, shop, viewpoint)
+        - Update or remove a stop (dry spring, closed hut, wrong place)
+        - The route has changed (reroute, closure, washed-out section)
+        - New alternate or variant
+        - Conditions (snow, hazard, seasonal note)
+        - Something else
+    validations:
+      required: true
+  - type: input
+    id: where
+    attributes:
+      label: Where
+      description: A stop's name, a distance along the trail, coordinates or an OpenStreetMap link.
+      placeholder: "e.g. Refuge de Petra Piana, or km 84 from Calenzana, or 42.2381, 9.0583"
+    validations:
+      required: true
+  - type: textarea
+    id: what
+    attributes:
+      label: What's wrong or new?
+      description: What you saw, and what the guide should say instead.
+      placeholder: |
+        e.g. The guide says 6.2 km from the refuge to the spring; it's closer to 4.5 km.
+        e.g. The spring below the col was dry in late August.
+        e.g. The trail now skips the gorge after a landslide; the detour adds about an hour.
+        e.g. There's a signed low-level alternate through the valley for bad weather.
+    validations:
+      required: true
+  - type: input
+    id: when
+    attributes:
+      label: When did you see it?
+      description: A date, or a month and year. Conditions change with the season.
+      placeholder: "e.g. 2026-08-24, or August 2026"
+  - type: textarea
+    id: source
+    attributes:
+      label: Photo, GPX or source
+      description: Drop a photo or a GPX file here, or link a notice from a park, trail association or hut.

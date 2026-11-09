@@ -1,0 +1,379 @@
+/*
+ * The Disha tour on the home page. Every visual change is a CSS animation that runs while
+ * its slide has `.run`. Without `.run` (no JavaScript, reduced motion, or a slide that
+ * isn't playing) each element sits in its final state, so every slide reads as its
+ * summary. The player in DishaTourPlayer.tsx only toggles classes.
+ *
+ * Timing: four steps of --step each. Elements set --d (when they come in), --o (when
+ * they go) and --dur in their inline style.
+ *
+ * The hero animation (HeroTrail.tsx) uses the same classes. Its wrapper has `.root` and `.run`
+ * on one element, and HeroControls.tsx toggles `.paused` and `.run` to pause and replay it.
+ */
+
+.root {
+  --step: 3.8s;
+}
+
+.root.paused *,
+.root.paused *::before,
+.root.offscreen *,
+.root.offscreen *::before {
+  animation-play-state: paused !important;
+}
+
+.track {
+  scrollbar-width: none;
+}
+
+.track::-webkit-scrollbar {
+  display: none;
+}
+
+/* An invisible clock for the slide playing; its end moves the tour on */
+.timer {
+  animation: tick calc(var(--step) * 3) linear both;
+}
+
+/* Elements on the map */
+.walk {
+  offset-rotate: 0deg;
+  offset-distance: var(--to);
+}
+
+.flash,
+.clear {
+  opacity: 0;
+}
+
+.grow,
+.growRight {
+  transform-box: fill-box;
+  transform-origin: left;
+}
+
+.growRight {
+  transform-origin: right;
+}
+
+/* Plan ahead: the violet A to B section of a gray route, at its final selection */
+.selection {
+  stroke-dasharray: var(--a-b) 1;
+  stroke-dashoffset: var(--off-a);
+}
+
+/* Hero: the section between the two stops, at rest. While running it starts as the whole
+   route and shrinks to this section as A and B slide in from the ends. */
+.selectBoth {
+  stroke-dasharray: var(--a-b) 1;
+  stroke-dashoffset: var(--off-a);
+}
+
+/* Hero: a tent that pops in from its floor */
+.pop {
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+}
+
+/* Plan ahead: the map stays full-size while the sheet floats up over it, then zooms
+   into the A-to-B climb. Resting state (no animation) is the zoomed climb, which is
+   the slide's summary. */
+.zoom {
+  transform: var(--zoom);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .run .show {
+    animation: fade-in 0.5s ease-out both;
+    animation-delay: var(--d, 0s);
+  }
+
+  .run .flash {
+    animation:
+      fade-in 0.5s ease-out both,
+      fade-out 0.4s ease-in forwards;
+    animation-delay: var(--d, 0s), var(--o, 0s);
+  }
+
+  .run .clear {
+    animation: fade-out-from-full 0.5s ease-out both;
+    animation-delay: var(--d, 0s);
+  }
+
+  .run .draw {
+    animation: draw var(--dur, 1.6s) ease-in-out both;
+    animation-delay: var(--d, 0s);
+  }
+
+  .run .grow,
+  .run .growRight {
+    animation: grow var(--dur, 1.6s) ease-out both;
+    animation-delay: var(--d, 0s);
+  }
+
+  /* Full-size while the sheet comes up, then zoom into the climb */
+  .run .zoom {
+    animation: zoom var(--dur) ease-in-out both;
+    animation-delay: var(--d, 0s);
+  }
+
+  .run .selection {
+    animation: select var(--dur) both;
+    animation-delay: var(--d, 0s);
+  }
+
+  .run .selectBoth {
+    animation: select-both var(--dur) ease-in-out both;
+    animation-delay: var(--d, 0s);
+  }
+
+  .run .pop {
+    animation: pop 0.45s cubic-bezier(0.2, 0.9, 0.3, 1.3) both;
+    animation-delay: var(--d, 0s);
+  }
+
+  /* An invisible element whose animation ends with the hero's, so the controls can tell */
+  .run .endMark {
+    animation: tick 0.1s linear both;
+    animation-delay: var(--d, 0s);
+  }
+
+  .run .rise {
+    animation: rise 1s ease-out both;
+    animation-delay: var(--d, 0s);
+  }
+
+  /* Slides the sheet down out of the way as the map zooms into the climb */
+  .run .sheetDown {
+    animation: sheet-down var(--dur, 1.3s) ease-in-out both;
+    animation-delay: var(--d, 0s);
+  }
+
+  /* The summary pill slides in from the left and fades in once zoomed */
+  .run .pillIn {
+    animation: pill-in 0.5s ease-out both;
+    animation-delay: var(--d, 0s);
+  }
+
+  /* The saved chip drops into the download card's spot as that card fades, and stays */
+  .run .dropIn {
+    animation: drop-in 0.55s ease-out both;
+    animation-delay: var(--d, 0s);
+  }
+
+  .run .walk {
+    animation: walk var(--dur, 3s) ease-in-out both;
+    animation-delay: var(--d, 0s);
+  }
+
+  .run .slideX {
+    animation: slide-x var(--dur, 3s) ease-in-out both;
+    animation-delay: var(--d, 0s);
+  }
+
+  /* The step list: faint before its turn, ink with a violet bar during it, muted after */
+  .run .stepItem {
+    animation:
+      step-on 0.4s ease-out both,
+      step-off 0.4s ease-in forwards;
+    animation-delay: var(--d), var(--o);
+  }
+
+  .run .stepItem:last-child {
+    animation: step-on 0.4s ease-out both;
+    animation-delay: var(--d);
+  }
+}
+
+.stepItem {
+  border-left: 2px solid var(--line);
+  color: var(--muted);
+}
+
+.stepItem:last-child {
+  border-left-color: var(--ink);
+  color: var(--ink);
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fade-out {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes fade-out-from-full {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes draw {
+  from {
+    stroke-dashoffset: 1;
+  }
+
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes grow {
+  from {
+    transform: scaleX(0);
+  }
+
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@keyframes walk {
+  from {
+    offset-distance: var(--from);
+  }
+
+  to {
+    offset-distance: var(--to);
+  }
+}
+
+@keyframes slide-x {
+  from {
+    transform: translateX(var(--fx, 0));
+  }
+
+  to {
+    transform: translateX(var(--dx));
+  }
+}
+
+/* From the full-size map to the climb filling the card. --zoom is set per scene. */
+@keyframes zoom {
+  from {
+    transform: none;
+  }
+
+  to {
+    transform: var(--zoom);
+  }
+}
+
+/* The sheet stays in place at rest; it only slides down while the map zooms */
+.sheetDown {
+  transform: translateY(0);
+}
+
+@keyframes sheet-down {
+  to {
+    transform: translateY(var(--down, 150px));
+  }
+}
+
+@keyframes pill-in {
+  from {
+    opacity: 0;
+    transform: translateX(-16px);
+  }
+}
+
+/* The saved chip drops down into the download card's spot and settles */
+@keyframes drop-in {
+  from {
+    opacity: 0;
+    transform: translateY(-12px);
+  }
+}
+
+/* B moves in from the end, holds, then A moves in from the start */
+@keyframes select {
+  0% {
+    stroke-dasharray: 1 0;
+    stroke-dashoffset: 0;
+    animation-timing-function: ease-in-out;
+  }
+
+  41% {
+    stroke-dasharray: var(--to-b) 1;
+    stroke-dashoffset: 0;
+    animation-timing-function: linear;
+  }
+
+  59% {
+    stroke-dasharray: var(--to-b) 1;
+    stroke-dashoffset: 0;
+    animation-timing-function: ease-in-out;
+  }
+
+  100% {
+    stroke-dasharray: var(--a-b) 1;
+    stroke-dashoffset: var(--off-a);
+  }
+}
+
+@keyframes select-both {
+  from {
+    stroke-dasharray: 1 0;
+    stroke-dashoffset: 0;
+  }
+
+  to {
+    stroke-dasharray: var(--a-b) 1;
+    stroke-dashoffset: var(--off-a);
+  }
+}
+
+@keyframes pop {
+  from {
+    opacity: 0;
+    transform: scale(0.4) translateY(4px);
+  }
+}
+
+@keyframes rise {
+  from {
+    transform: translateY(170px);
+  }
+}
+
+@keyframes tick {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 0.01;
+  }
+}
+
+@keyframes step-on {
+  from {
+    color: var(--faint);
+    border-left-color: var(--line);
+  }
+
+  to {
+    color: var(--ink);
+    border-left-color: var(--ink);
+  }
+}
+
+@keyframes step-off {
+  to {
+    color: var(--muted);
+    border-left-color: var(--line);
+  }
+}
