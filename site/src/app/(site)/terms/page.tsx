@@ -15,10 +15,9 @@ export default function TermsPage() {
         </h1>
         <p>Last updated November 9, 2026.</p>
         <p>
-          These terms cover this site and the services behind the Disha app: the map tiles at
-          tiles.hikaya.app, the trail guides at guides.hikaya.app and the trail files at
-          /data/trails/ on this site. Hikaya runs all of them. By using them, you agree to these
-          terms.
+          These terms cover this site and the services behind the Disha app: the map tiles and trail
+          guides the app downloads, and the trail files at /data/trails/ on this site. Hikaya runs
+          all of them. By using them, you agree to these terms.
         </p>
 
         <h2 id="services">Map tiles and guides</h2>

@@ -75,8 +75,8 @@ export default function HomePage() {
                 Know how far it is to the next water, hut or pass.
               </h1>
               <p className="mt-6 max-w-xl text-xl text-muted">
-                Disha is an offline hiking app for iPhone. See the distance, the climb and the time
-                to the next point of interest, measured from where you are. It works with no signal.
+                Disha is an offline hiking app for iPhone. It shows the distance, climb and time
+                from where you are to the next stop, with no signal.
               </p>
               <div className="mt-8 flex flex-wrap gap-3">
                 <Button href="/#waitlist">Join the beta waitlist</Button>
@@ -97,9 +97,9 @@ export default function HomePage() {
               How Disha works on the trail
             </h2>
             <p className="mt-4 text-lg text-muted">
-              Follow one hiker on a real stage of the Tour du Mont Blanc, from Notre-Dame de la
-              Gorge over the Col du Bonhomme to Les Chapieux. The water report, the confirmations
-              and the seasons in the example are made up.
+              This example follows a real stage of the Tour du Mont Blanc, from Notre-Dame de la
+              Gorge over the Col du Bonhomme to Les Chapieux. The water report, confirmations and
+              seasons are made up.
             </p>
           </div>
           <div className="mt-10">
@@ -110,31 +110,24 @@ export default function HomePage() {
 
       <Section title="Starting with long routes in Europe">
         <p>
-          Disha is built first for the waymarked long routes of Europe, such as the GR system in
-          France, Spain and Portugal. The{' '}
+          Disha starts with Europe&apos;s waymarked long routes, such as the GR trails in France,
+          Spain and Portugal. The{' '}
           <Link href="/trails/" className={linkClass}>
             trails list
           </Link>{' '}
-          shows which trails have a curated guide, and the{' '}
+          shows which have a guide, and the{' '}
           <Link href="/maps/" className={linkClass}>
             maps page
           </Link>{' '}
           shows where you can download offline maps.
         </p>
-        <p>
-          Maps are built on OpenStreetMap, so you can see where the data comes from and fix what is
-          wrong.
-        </p>
+        <p>The maps come from OpenStreetMap, so anyone can check the data and fix mistakes.</p>
       </Section>
 
       <Section id="waitlist" title="Join the beta waitlist">
         <p>
           Disha is in beta on TestFlight for iPhone. Sign up and we'll email an invite when seats
           open.
-        </p>
-        <p>
-          Disha will be a paid app, and pricing is not final. The trail data stays free to view on
-          the web.
         </p>
         <div className="pt-2">
           <Waitlist />

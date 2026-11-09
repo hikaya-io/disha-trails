@@ -34,13 +34,13 @@ export const PAGES: readonly SitePage[] = [
     path: '/trails/',
     title: 'Hiking trail guides',
     description:
-      'Curated Disha guides for long-distance trails: the ones in the app, the next batch, and the most-voted requests. Vote, request a trail or suggest an edit.',
+      'Curated Disha guides for long-distance hiking trails, with water, huts and campsites along the route. See what is in the app, vote or request a trail.',
   },
   {
     path: '/maps/',
     title: 'Offline maps for hiking',
     description:
-      'Where Disha has offline maps for hiking, along trails and around cities, updated daily. See what is available, shortlisted next and most requested.',
+      'Offline hiking maps in Disha, along trails and around cities, updated daily. See what is available now, what is next and what hikers have requested.',
   },
   {
     path: '/docs/',
@@ -88,7 +88,7 @@ export const PAGES: readonly SitePage[] = [
     path: '/docs/requests/',
     title: 'Request a trail',
     description:
-      'How to ask Disha for a trail map or guide, vote on a request with a GitHub 👍, and how the most-voted requests are shortlisted next.',
+      'How to ask Disha for a trail map or guide, vote for a request on GitHub, and how the most-voted trails are built next.',
   },
   {
     path: '/docs/edits/',
@@ -100,7 +100,7 @@ export const PAGES: readonly SitePage[] = [
     path: '/docs/open-data/',
     title: 'Open trail data',
     description:
-      'How Disha keeps trail data open and current: seasonal conditions, water and stops, votes on reports, season summaries and OpenStreetMap.',
+      'How hikers keep Disha trail guides current: reports on water, snow and stops, votes on reports, season summaries and OpenStreetMap.',
   },
   {
     path: '/docs/faq/',

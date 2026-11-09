@@ -475,7 +475,7 @@ const slides = [
     point:
       'Maps download in small packages along each trail, so you store only what the trip needs.',
     steps: [
-      'Once downloaded, the stage works like a paper map with the contours, paths, water, and huts you need to find your way.',
+      'Once downloaded, the stage works like a paper map, with contours, paths, water, and huts.',
       `With no signal, the map shows where you are and what’s left: ${stage.km} km, ${fmt(stage.up)} m up, about ${stage.eta.slice(1)}.`,
       'Everything the stage needs is on your phone before you leave.',
     ],
@@ -484,12 +484,11 @@ const slides = [
   {
     tab: 'Open guides',
     title: 'Open guides',
-    point:
-      'The guides are built on open data and run by the community because trail information shouldn’t sit behind a paywall.',
+    point: 'Guides are built on open data, and hikers keep them up to date.',
     steps: [
       'At a spring, the guide shows what hikers last reported and the months it usually runs dry.',
-      'At a refuge, hikers confirm what’s there, like tent sites and hot meals.',
-      'Guides start from OpenStreetMap then hikers and moderators keep them current.',
+      'At a refuge, hikers confirm what’s there, such as tent sites and hot meals.',
+      'Stops start from OpenStreetMap, and moderators review what hikers add.',
     ],
     Scene: GuidesScene,
   },
@@ -500,7 +499,7 @@ const slides = [
     steps: [
       `Drag B to where you’ll stop. The distance, climb, and time update as you drag: ${toRefuge.km} km, about ${toRefuge.eta.slice(1)} to the refuge.`,
       `Drag A to the foot of the climb to see that section alone: ${climb.km} km and ${fmt(climb.up)} m up.`,
-      'The plan saves with the map so it’s there when you go offline.',
+      'The plan is saved with the map, so it works offline.',
     ],
     Scene: PlanScene,
   },

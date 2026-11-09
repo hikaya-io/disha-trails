@@ -18,22 +18,38 @@ export default function PrivacyPage() {
 
         <h2 id="map-credits">Map credits</h2>
         <p>
-          The maps on this site, in the home page animation and the tour, are drawn from these
-          sources. They do not collect any information about you.
+          The maps on this site, from the home page animation to the maps and trail pages, use these
+          sources.
         </p>
         <ul>
           <li>
-            <strong>Map data.</strong> Paths, streams, lakes, land cover and the Tour du Mont Blanc
-            route are ©{' '}
+            <strong>Map data.</strong> Paths, streams, lakes, land cover and trail routes are ©{' '}
             <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>,
             available under the Open Database License.
           </li>
           <li>
-            <strong>Terrain.</strong> Contours and elevation come from the Copernicus DEM GLO-30. ©
-            DLR e.V. 2010–2014 and © Airbus Defence and Space GmbH 2014–2018, provided under
-            COPERNICUS by the European Union and ESA. All rights reserved.
+            <strong>Terrain.</strong> Contours, hillshade and elevation profiles come from the
+            Copernicus DEM GLO-30. © DLR e.V. 2010–2014 and © Airbus Defence and Space GmbH
+            2014–2018, provided under COPERNICUS by the European Union and ESA. All rights reserved.
+          </li>
+          <li>
+            <strong>OpenFreeMap layer.</strong> Map tiles from{' '}
+            <a href="https://openfreemap.org">OpenFreeMap</a>, © OpenMapTiles, built from
+            OpenStreetMap data.
+          </li>
+          <li>
+            <strong>OSM Classic layer.</strong> Map tiles from{' '}
+            <a href="https://www.openstreetmap.org">OpenStreetMap</a>.
+          </li>
+          <li>
+            <strong>Map labels.</strong> Noto Sans, under the SIL Open Font License.
           </li>
         </ul>
+        <p>
+          The default Terrain layer is Disha&apos;s own map and loads from Hikaya. If you switch to
+          the OpenFreeMap or OSM Classic layer, your browser loads tiles from that service, which
+          receives your IP address and browser details to send them.
+        </p>
 
         <h2 id="waitlist">The beta waitlist</h2>
         <p>

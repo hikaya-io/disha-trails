@@ -353,5 +353,5 @@ export function trailDescription(trail: Trail): string {
   const length = trail.lengthKm ? `, ${formatLength(trail.lengthKm)}` : ''
   const map = MAP_LABELS[mapAvailability(trail.status)].toLowerCase()
   const guide = GUIDE_LABELS[guideAvailability(trail.guide)].toLowerCase()
-  return `${trail.name}${where ? ` in ${where}` : ''}${length}. Offline map: ${map}. Guide: ${guide}. See where the map cells run along the route, with its OpenStreetMap source.`
+  return `${trail.name}${where ? ` in ${where}` : ''}${length}. Offline map: ${map}. Guide: ${guide}. See the route on the map and on OpenStreetMap.`
 }
