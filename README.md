@@ -21,14 +21,16 @@ The `trail-edit` label has to exist in the repo for the template to apply it.
 
 `coverage.json` is rebuilt daily in the private disha-tiles repo and pushed, with the old
 standalone dashboard (`index.html`), to the root of this repo's `coverage-data` branch; don't edit
-that branch by hand. It carries guide statuses only when disha-tiles has a `DISHA_GUIDES_TOKEN`
-secret (read access to disha-guides); without it, `/trails/` is empty.
+that branch by hand, and don't merge it: it's data, not code. The deploy copies its `coverage.json`
+into every build, and disha-tiles force-pushes the branch daily as a single commit, so there's no
+history to merge. It carries guide statuses only when disha-tiles has a `DISHA_GUIDES_TOKEN`
+secret (read access to hikaya-io/disha-guides); without it, `/trails/` is empty.
 
 ## Marketing site
 
 `site/` holds the public Disha site (Next.js, MDX, static export, yarn). From `site/`:
 
-- `yarn dev` runs it locally. The site reads its own `public/coverage.json` (gitignored), so download it first: `curl -o public/coverage.json https://hikaya-io.github.io/disha-trails/coverage.json`. Or set `NEXT_PUBLIC_COVERAGE_DATA_URL` to that URL in `.env.local` to read the live file instead.
+- `yarn dev` runs it locally. The site reads its own `public/coverage.json` (gitignored), so download it first: `curl -o public/coverage.json https://disha.hikaya.io/coverage.json`. Or set `NEXT_PUBLIC_COVERAGE_DATA_URL` to that URL in `.env.local` to read the live file instead.
 - `yarn lint`, `yarn test` and `yarn build` are the checks. A production build needs `NEXT_PUBLIC_SITE_URL`; see `site/.env.example`. While `yarn dev` is running, check a build with `NEXT_DIST_DIR=.next-check yarn build`: a build into `.next` overwrites the files the dev server serves and breaks it until it restarts. That build exports into `.next-check/`, not `out/`.
 - To check a build under the GitHub Pages path, build with `NEXT_PUBLIC_SITE_URL=https://hikaya-io.github.io/disha-trails NEXT_PUBLIC_BASE_PATH=/disha-trails`, copy the export into `<tmp>/disha-trails/` and serve `<tmp>` with `python3 -m http.server`.
 - Every page is registered in `site/src/lib/pages.ts`, which feeds the sitemap and metadata. A draft page is noindex and left out of the sitemap.

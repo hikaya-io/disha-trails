@@ -1,9 +1,9 @@
 /**
  * The coverage data behind /maps/ and /trails/, and the pure helpers both pages use.
  *
- * disha-tiles builds coverage.json daily (tools/coverage-map.py --json-out) and publishes it to
- * the gh-pages branch of disha-trails, so the pages pick up new maps, guides and votes without a
- * site rebuild. See docs/coverage-dashboard.md in disha-tiles for where each field comes from.
+ * disha-tiles builds coverage.json daily (tools/coverage-map.py --json-out), pushes it to the
+ * coverage-data branch of disha-trails and triggers a redeploy, which copies it into the site as
+ * /coverage.json. See docs/coverage-dashboard.md in disha-tiles for where each field comes from.
  */
 
 /** [west, south, east, north] in degrees. */
