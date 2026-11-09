@@ -11,6 +11,7 @@ on:
     branches: [main]
     paths:
       - 'site/**'
+      - 'trails/**'
       - '.github/workflows/deploy-site.yml'
   repository_dispatch:
     types: [coverage-updated]
@@ -85,6 +86,14 @@ jobs:
         run: |
           mkdir -p out/coverage
           cp "$RUNNER_TEMP/coverage-dashboard.html" out/coverage/index.html
+
+      # The trail files, at /data/trails/ with the same paths as in trails/, such as
+      # /data/trails/gr20-corsica-2024.gpx. andrewpham.dev's trail pages load them from here.
+      # Not under /trails/, where the site's own trail pages live.
+      - name: Add trail files
+        run: |
+          mkdir -p out/data
+          cp -R ../trails out/data/trails
 
       - uses: actions/upload-pages-artifact@v5
         with:

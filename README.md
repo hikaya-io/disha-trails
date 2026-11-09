@@ -89,11 +89,13 @@ disha-trails/
 
 ## Downloading a file
 
-Open a file on GitHub and click **Download raw file**. To link to a file or load it in code, use its raw URL:
+Open a file on GitHub and click **Download raw file**. To link to a file or load it in code, use its address on the Disha site, which serves everything in `trails/` at `/data/trails/` with the same paths (the deploy copies it, see `deploy-site.yml`):
 
 ```
-https://raw.githubusercontent.com/hikaya-io/disha-trails/refs/heads/main/trails/gr20-corsica-2024.gpx
+https://disha.hikaya.io/data/trails/gr20-corsica-2024.gpx
 ```
+
+andrewpham.dev's trail pages load their GPX and GeoJSON from there, so renaming or moving a file breaks them. Search `me/src/app/trails` first.
 
 The NPS boundary file is stored in Git LFS, so its raw URL returns a pointer. Download it from the GitHub page instead.
 
