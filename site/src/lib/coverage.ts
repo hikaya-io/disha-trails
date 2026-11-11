@@ -11,12 +11,29 @@ export type Bounds = [number, number, number, number]
 
 /**
  * Offline map status from the tile catalog. live: every cell along the route is published.
- * partial: some are. planned: queued for the next build. candidate: listed, not enabled.
- * wishlist: only in the guides registry, with no tile area yet.
+ * partial: some are. planned: in the next batch, shown as shortlisted; the tile repo recomputes it
+ * on every run from what's enabled, built and voted on, so it rotates. candidate: has a tile area
+ * but is waiting, not in the next batch. wishlist: only in the guides registry, no tile area yet.
  */
 export type MapStatus = 'live' | 'partial' | 'planned' | 'candidate' | 'wishlist'
 
-export type TrailRequest = { number: number; url: string; votes: number }
+/**
+ * A trail's open request issue on GitHub. Its 👍 and 👎 are the up and down votes, counted daily
+ * from accounts at least 30 days old; `votes` is the score, up minus down. Files written before
+ * 2026-11-10 have only `votes`, the 👍 count.
+ */
+export type TrailRequest = {
+  number: number
+  url: string
+  votes: number
+  up?: number
+  down?: number
+}
+
+/** A request's up and down votes, reading older files' `votes` as all up. */
+export function voteCounts(request: TrailRequest): { up: number; down: number } {
+  return { up: request.up ?? request.votes, down: request.down ?? 0 }
+}
 
 export type Trail = {
   id: string
@@ -30,12 +47,16 @@ export type Trail = {
   bytes: number
   status: MapStatus
   bbox: Bounds | null
+  /** Wishlist rows only: the extent of the trail's countries, to frame a map with no cells yet. */
+  countryBox?: Bounds | null
   cellIds: string[]
   /** Status in the disha-guides registry, or "" when the trail has no guide row. */
   guide: string
   request: TrailRequest | null
   /** OpenStreetMap route relation the trail's route comes from. Missing on a few rows. */
   osmRelation?: number | null
+  /** When its map was last built, YYYY-MM-DD (see formatDay). Missing in files before 2026-11-10. */
+  updated?: string | null
 }
 
 export type City = {
@@ -45,6 +66,8 @@ export type City = {
   status: MapStatus
   bbox: Bounds
   cellIds: string[]
+  /** When its map was last built, YYYY-MM-DD (see formatDay). Missing in files before 2026-11-10. */
+  updated?: string | null
 }
 
 export type CoverageData = {
@@ -134,15 +157,40 @@ export const GUIDE_LABELS: Record<GuideAvailability, string> = {
 /** A status tag's color: green, yellow, red or gray. */
 export type Tone = 'good' | 'warn' | 'bad' | 'none'
 
-/** A status as a tag: its word on the trail page, a longer one in lists, and its color. */
-export type Badge = { tone: Tone; label: string; short: string }
+/**
+ * What a map tag is drawn like: the dot of the trail (teal) or city (pink) it belongs to, or, for
+ * a tag that stands for both such as a filter, the same shapes in ink. See StatusBadge.
+ */
+export type Mark = 'trail' | 'city' | 'any'
 
-/** An offline map's status as a tag. Shortlisted maps are gray: nothing to download yet. */
-export function mapBadge(status: MapStatus): Badge {
-  if (status === 'live') return { tone: 'good', label: 'Available', short: 'Map available' }
-  if (status === 'partial') return { tone: 'warn', label: 'Partial', short: 'Map partial' }
-  if (status === 'planned' || status === 'candidate') {
-    return { tone: 'none', label: 'Shortlisted', short: 'Map shortlisted' }
+/**
+ * A status as a tag: its word on the trail page, a longer one in lists, and its color. A map tag
+ * also carries its `mark` and the `shape` of its dot: solid when available, a colored ring when
+ * partial, a gray ring when shortlisted.
+ */
+export type Badge = {
+  tone: Tone
+  label: string
+  short: string
+  mark?: Mark
+  shape?: 'solid' | 'ring' | 'gray'
+}
+
+/**
+ * An offline map's status as a tag. Available and partial are drawn like the place's dot on the
+ * map (`mark`): solid when available, outlined when partial. Shortlisted maps are gray: nothing
+ * to download yet.
+ */
+export function mapBadge(status: MapStatus, mark: Mark = 'any'): Badge {
+  // Available and partial need no "Map": drawn in the trail or city color, they read as map tags.
+  if (status === 'live') {
+    return { tone: 'good', label: 'Available', short: 'Available', mark, shape: 'solid' }
+  }
+  if (status === 'partial') {
+    return { tone: 'warn', label: 'Partial', short: 'Partial', mark, shape: 'ring' }
+  }
+  if (status === 'planned') {
+    return { tone: 'none', label: 'Shortlisted', short: 'Map shortlisted', mark, shape: 'gray' }
   }
   return { tone: 'none', label: 'Not yet', short: 'No map yet' }
 }
@@ -166,7 +214,7 @@ export type Stage = 'available' | 'shortlisted' | 'popular'
 /** Where an offline map is in the funnel. Partial maps count as available: some cells download. */
 export function mapStage(status: MapStatus): Stage {
   if (status === 'live' || status === 'partial') return 'available'
-  if (status === 'planned' || status === 'candidate') return 'shortlisted'
+  if (status === 'planned') return 'shortlisted'
   return 'popular'
 }
 
@@ -180,7 +228,7 @@ export function guideStage(guide: string): Stage | null {
 
 const votes = (row: { request?: TrailRequest | null }) => row.request?.votes ?? 0
 
-/** A sorted copy: most votes first, then A to Z. */
+/** A sorted copy: highest score (up minus down) first, then A to Z. */
 export function byVotes<T extends { name: string; request?: TrailRequest | null }>(rows: T[]): T[] {
   return [...rows].sort((a, b) => votes(b) - votes(a) || a.name.localeCompare(b.name))
 }
@@ -254,8 +302,8 @@ export function trailAction(
 ): { href: string; label: string } | null {
   if (takesEdits(trail)) return { href: editUrl(data, trail), label: 'Suggest an edit' }
   if (trail.request) {
-    const { votes, url } = trail.request
-    return { href: url, label: `${votes} ${votes === 1 ? 'vote' : 'votes'} · add yours` }
+    const { up, down } = voteCounts(trail.request)
+    return { href: trail.request.url, label: `${up} up, ${down} down · vote` }
   }
   if (shortlisted) return null
   return { href: requestUrl(data, trail), label: requestLabel(trail) }
@@ -324,6 +372,52 @@ export function trailHref(id: string): string {
   return `/trails/${encodeURIComponent(id)}/`
 }
 
+/** Great-circle distance in km between the centers of two boxes. */
+function centerDistanceKm(a: Bounds, b: Bounds): number {
+  const rad = Math.PI / 180
+  const lat1 = ((a[1] + a[3]) / 2) * rad
+  const lat2 = ((b[1] + b[3]) / 2) * rad
+  const dLat = lat2 - lat1
+  const dLon = ((b[0] + b[2]) / 2 - (a[0] + a[2]) / 2) * rad
+  const h = Math.sin(dLat / 2) ** 2 + Math.cos(lat1) * Math.cos(lat2) * Math.sin(dLon / 2) ** 2
+  return 2 * 6371 * Math.asin(Math.min(1, Math.sqrt(h)))
+}
+
+/**
+ * The trails nearest to one trail, for the links at the foot of its page. Only trails with a map
+ * area count, since the others have little to show. Besides the `count` nearest, it adds any trail
+ * whose own nearest is this one, so every mapped trail page gets a link from at least one other
+ * trail page, however remote it is. Nearest first.
+ */
+export function nearbyTrails<T extends Pick<Trail, 'id' | 'bbox'>>(
+  trail: T,
+  trails: readonly T[],
+  count = 5,
+): T[] {
+  const mapped = trails.filter((t): t is T & { bbox: Bounds } => t.bbox !== null)
+  const byDistance = (from: Bounds, list: (T & { bbox: Bounds })[]) =>
+    list
+      .map((t) => ({ t, km: centerDistanceKm(from, t.bbox) }))
+      .sort((a, b) => a.km - b.km || a.t.id.localeCompare(b.t.id))
+  if (!trail.bbox) return []
+  const others = byDistance(
+    trail.bbox,
+    mapped.filter((t) => t.id !== trail.id),
+  )
+  const pointingHere = new Set(
+    others
+      .filter(
+        ({ t }) =>
+          byDistance(
+            t.bbox,
+            mapped.filter((o) => o.id !== t.id),
+          )[0]?.t.id === trail.id,
+      )
+      .map(({ t }) => t.id),
+  )
+  return others.filter(({ t }, i) => i < count || pointingHere.has(t.id)).map(({ t }) => t)
+}
+
 /** The route relation on openstreetmap.org, or null when the trail has none. */
 export function osmUrl(trail: Pick<Trail, 'osmRelation'>): string | null {
   return trail.osmRelation ? `https://www.openstreetmap.org/relation/${trail.osmRelation}` : null
@@ -347,11 +441,98 @@ export function cellProgress(
   }
 }
 
-/** The meta description for a trail's page. */
+const dayFormat = new Intl.DateTimeFormat('en-GB', {
+  day: 'numeric',
+  month: 'short',
+  year: 'numeric',
+  timeZone: 'UTC',
+})
+
+/**
+ * A place's map build date for people: "2026-11-07" reads "7 Nov 2026". Cells are built in
+ * batches, so each trail and city has its own date. Null for a missing or malformed date.
+ */
+export function formatDay(day: string | null | undefined): string | null {
+  if (!day || !/^\d{4}-\d{2}-\d{2}$/.test(day)) return null
+  return dayFormat.format(new Date(`${day}T00:00:00Z`))
+}
+
+/**
+ * Search results cut a title at about 60 characters, so a trail's title leaves room for the
+ * layout's " | Disha" (8). Descriptions are cut at about 160.
+ */
+export const TRAIL_TITLE_MAX = 52
+export const TRAIL_DESCRIPTION_MAX = 160
+
+/** The first of `options` that fits in `max` characters, or the shortest. */
+function firstThatFits(options: string[], max: number): string {
+  return options.find((text) => text.length <= max) ?? options[options.length - 1]
+}
+
+/** Whether the trail's page offers a map today but no guide yet. */
+function mapOnly(trail: Pick<Trail, 'status' | 'guide'>): boolean {
+  return mapStage(trail.status) === 'available' && guideAvailability(trail.guide) !== 'available'
+}
+
+/**
+ * A trail page's title, naming what the page offers: "GR20 offline map and guide", or "Adlerweg
+ * offline hiking map" while only the map is built. A long name keeps a shorter suffix, or none.
+ */
+export function trailTitle(trail: Pick<Trail, 'name' | 'status' | 'guide'>): string {
+  const { name } = trail
+  const options = mapOnly(trail)
+    ? [`${name} offline hiking map`, `${name} offline map`, name]
+    : [`${name} offline map and guide`, `${name} offline guide`, name]
+  return firstThatFits(options, TRAIL_TITLE_MAX)
+}
+
+/**
+ * A trail page's meta description: where the trail is and how long, then what Disha has for it
+ * today, from the guide's water, huts and campsites down to a request to vote on. Where and length
+ * drop out, in that order, when the whole would run past TRAIL_DESCRIPTION_MAX, and then the
+ * sentence's last clause.
+ */
 export function trailDescription(trail: Trail): string {
   const where = countriesOf(trail).join(', ')
-  const length = trail.lengthKm ? `, ${formatLength(trail.lengthKm)}` : ''
-  const map = MAP_LABELS[mapAvailability(trail.status)].toLowerCase()
-  const guide = GUIDE_LABELS[guideAvailability(trail.guide)].toLowerCase()
-  return `${trail.name}${where ? ` in ${where}` : ''}${length}. Offline map: ${map}. Guide: ${guide}. See the route on the map and on OpenStreetMap.`
+  const length = trail.lengthKm ? formatLength(trail.lengthKm) : ''
+  const facts = [where, length].filter(Boolean)
+  const named = [facts, length ? [length] : [], []].map((parts) =>
+    parts.length ? `${trail.name} (${parts.join(', ')})` : trail.name,
+  )
+
+  const guide = guideAvailability(trail.guide)
+  const guideNext =
+    guide === 'soon' ? ' Its guide is coming soon.' : ' Vote for its guide to be made next.'
+  // Each as [full, short]: the short form is for a name too long for the full one.
+  const says = (lead: string): [string, string] => {
+    if (guide === 'available') {
+      const start = `${lead}: offline map and trail guide in Disha for iPhone, with the water, huts, and campsites along the route`
+      return [`${start} and the distance to each.`, `${start}.`]
+    }
+    if (trail.status === 'live') {
+      const start = `${lead}: offline hiking map in Disha for iPhone, with paths, contours, and hillshade`
+      return [`${start} that work with no signal.${guideNext}`, `${start}.${guideNext}`]
+    }
+    if (trail.status === 'partial') {
+      const start = `${lead}: offline hiking map in Disha for iPhone, built along part of the route so far`
+      return [`${start}, with paths, contours, and hillshade.${guideNext}`, `${start}.${guideNext}`]
+    }
+    if (trail.status === 'planned') {
+      const start = `${lead} is shortlisted for Disha's next batch of offline maps for iPhone.`
+      return [
+        `${start} See its route and status, and vote for it on GitHub.`,
+        `${start} Vote for it on GitHub.`,
+      ]
+    }
+    const start = `${lead} has been requested for an offline map and guide in Disha for iPhone.`
+    return [
+      `${start} Vote for it on GitHub to help decide what is built next.`,
+      `${start} Vote for it on GitHub.`,
+    ]
+  }
+  const forms = named.map(says)
+  return firstThatFits(
+    [...forms.map(([full]) => full), ...forms.map(([, short]) => short)],
+    TRAIL_DESCRIPTION_MAX,
+  )
 }

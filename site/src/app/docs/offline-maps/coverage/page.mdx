@@ -5,17 +5,17 @@ export const metadata = pageMetadata('/docs/offline-maps/coverage/')
 
 # Where maps are available
 
-The [maps page](/maps/) shows every trail and city with an offline map, updated daily. Choose a row's **map** button to see it on the map, or a trail's name to open its page.
+The [maps page](/maps/) shows every trail and city with an offline map, or one on the way, updated daily. The list beside the map (behind the **list** button on a phone) is also its legend: search or filter it and the map shows the same trails and cities. Choose a row's name or a dot on the map to zoom to that place; for a trail, the bar above the list links to its page.
 
 ## Map status
 
 <StatusTable kind="map" />
 
-**Cells** counts the map cells built along each trail or around each city. Maps download cell by cell, so a partial map works wherever its cells are built.
+**Cells** counts the map cells built along each trail or around each city. Besides the cities we build maps for, any capital or city of a million people appears once trail maps nearby reach it, shown as partial until all the cells around it are built. Maps download cell by cell so a partial map works wherever its cells are built.
 
 ## On the map
 
-Filled squares are map cells you can download, and dashed outlines are cells not built yet. Zoomed out, each square is 4 × 4 cells, so the squares and cells line up as you zoom in. A city's dashed outline is the edge of its cells.
+Filled squares are map cells you can download and dashed outlines are cells not built yet. Zoomed out, each square is 4 × 4 cells so the squares and cells line up as you zoom in. Teal dots mark the trails in the list, at the middle of each trail's area, and pink dots the cities. A solid dot has every cell built, a colored ring is a partial map and a gray ring is shortlisted: in the next batch, with nothing built yet. The next batch is up to ten places picked by votes, and it changes as maps are built and votes come in. Point at a dot to see its cells and when its map was last built: cells are built in batches, so each place has its own date. A city's dashed outline is the edge of its cells.
 
 ## Missing a place?
 

@@ -46,6 +46,6 @@ US federal government data, in the public domain in the United States.
 
 | Files | Source | License |
 |-------|--------|---------|
-| `site/public/routes/` | Trail lines from Disha's guide corridors, built on © [OpenStreetMap contributors](https://www.openstreetmap.org/copyright); heights from the Copernicus DEM GLO-30 | ODbL |
+| `/routes/` on the site (built at deploy, not in the repo) | Trail lines and heights from Disha's published guides, built on © [OpenStreetMap contributors](https://www.openstreetmap.org/copyright); heights from the Copernicus DEM GLO-30 | ODbL |
 | `site/public/map/fonts/` | Noto Sans glyphs | SIL Open Font License, in `LICENSE-OFL.txt` |
 | `site/public/map/` styles and sprite | Built from Disha's map styles and [OpenFreeMap](https://openfreemap.org)'s, with the [OpenMapTiles](https://openmaptiles.org) schema | The upstream styles' terms; credit © OpenMapTiles and © OpenStreetMap contributors |

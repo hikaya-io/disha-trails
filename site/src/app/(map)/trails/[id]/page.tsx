@@ -4,12 +4,22 @@ import { JsonLd } from '@/components/JsonLd'
 import { PageTop } from '@/components/PageTop'
 import { loadCoverageForBuild } from '@/lib/coverage-build'
 import { routeIds } from '@/lib/route-files'
-import { splitTrailName, trailDescription, trailHref } from '@/lib/coverage'
+import Link from 'next/link'
+import {
+  formatLength,
+  nearbyTrails,
+  splitTrailName,
+  type Trail,
+  trailDescription,
+  trailHref,
+  trailTitle,
+} from '@/lib/coverage'
+import { shareMetadata } from '@/lib/metadata'
 import { absoluteUrl, SITE_NAME } from '@/lib/site'
 import { TrailDetail } from './_components/TrailDetail'
 
 // One page per trail in coverage.json at build time. These aren't in lib/pages.ts, which lists
-// the fixed pages; the sitemap adds the trails that have a map.
+// the fixed pages, and they are noindex and left out of the sitemap.
 export const dynamicParams = false
 
 export async function generateStaticParams() {
@@ -32,15 +42,16 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { trail } = await findTrail(params)
   const url = absoluteUrl(trailHref(trail.id))
-  const title = `${trail.name}: offline map and guide`
+  const title = trailTitle(trail)
   const description = trailDescription(trail)
   return {
     title,
     description,
     alternates: { canonical: url },
-    openGraph: { type: 'website', siteName: SITE_NAME, title, description, url, locale: 'en_US' },
-    // A trail with no map area yet has little to show, so keep it out of search results.
-    ...(trail.bbox ? {} : { robots: { index: false, follow: true } }),
+    ...shareMetadata({ title, description, url }),
+    // Trail pages stay out of search results; only the main pages are indexed (2026-11-12). The
+    // title and description still serve link previews.
+    robots: { index: false, follow: true },
   }
 }
 
@@ -53,7 +64,7 @@ export default async function TrailPage({ params }: { params: Promise<{ id: stri
         data={{
           '@context': 'https://schema.org',
           '@type': 'WebPage',
-          name: `${trail.name}: offline map and guide`,
+          name: trailTitle(trail),
           url,
           isPartOf: { '@type': 'WebSite', name: SITE_NAME, url: absoluteUrl('/') },
         }}
@@ -73,7 +84,34 @@ export default async function TrailPage({ params }: { params: Promise<{ id: stri
           />
         }
         repo={{ repo: data.repo, requestLabel: data.requestLabel }}
+        nearby={<NearbyTrails trails={nearbyTrails(trail, data.trails)} />}
       />
     </>
+  )
+}
+
+// Server-rendered, so the links are in the page's HTML: the /trails/ table shows 25 rows at a
+// time, and without these most trail pages would have no plain link to them.
+function NearbyTrails({ trails }: { trails: Trail[] }) {
+  if (!trails.length) return null
+  return (
+    <section aria-labelledby="nearby-trails" className="mt-8 text-[13px]">
+      <h2 id="nearby-trails" className="text-faint">
+        Trails nearby
+      </h2>
+      <ul className="mt-2">
+        {trails.map((t) => (
+          <li key={t.id}>
+            <Link
+              href={trailHref(t.id)}
+              className="inline-flex min-h-11 items-center gap-2 text-ink hover:text-ink-soft"
+            >
+              <span className="underline">{t.name}</span>
+              <span className="text-muted tabular-nums">{formatLength(t.lengthKm)}</span>
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </section>
   )
 }

@@ -9,8 +9,14 @@ import clsx from 'clsx'
 import { MAP_LAYERS, type MapLayerId } from '@/lib/map/layers'
 import type { Units } from '@/lib/trail-route'
 
+// No fill of its own: each group of buttons sits on one glass surface (MapButtonGroup).
 export const mapButton =
-  'flex size-11 cursor-pointer items-center justify-center bg-bg text-ink hover:text-ink-soft focus-visible:outline focus-visible:outline-1 focus-visible:outline-ink'
+  'flex size-11 cursor-pointer items-center justify-center text-ink hover:text-ink-soft focus-visible:outline focus-visible:outline-1 focus-visible:outline-ink'
+
+/** Map buttons stacked on one glass surface, a hairline between each, as the app's controls. */
+export function MapButtonGroup({ children }: { children: React.ReactNode }) {
+  return <div className="glass flex flex-col divide-y divide-line rounded-xl">{children}</div>
+}
 
 function Icon({ children }: { children: React.ReactNode }) {
   return (
@@ -76,7 +82,12 @@ export function LayerPicker({
         </Icon>
       </button>
       {open && (
-        <div className="absolute left-full top-0 ml-px w-36 bg-bg text-[13px]">
+        // To the button's left, as the buttons sit at the map's right edge. Glass's edge and
+        // shadow on a solid fill: inside the button group's glass, a blur of its own has no effect.
+        <div
+          className="glass absolute top-0 right-full mr-3 w-36 overflow-hidden rounded-xl text-[13px]"
+          style={{ background: 'var(--bg)' }}
+        >
           {MAP_LAYERS.map(({ id, label }) => (
             <button
               key={id}
@@ -160,7 +171,7 @@ export function ZoomButtons({
   fitLabel: string
 }) {
   return (
-    <div className="flex flex-col gap-px">
+    <MapButtonGroup>
       <button
         type="button"
         onClick={onZoomIn}
@@ -200,6 +211,6 @@ export function ZoomButtons({
           <circle cx="12" cy="12" r="1.5" />
         </Icon>
       </button>
-    </div>
+    </MapButtonGroup>
   )
 }

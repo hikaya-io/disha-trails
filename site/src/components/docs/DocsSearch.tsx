@@ -84,7 +84,7 @@ export function DocsSearch({ index }: { index: SearchEntry[] }) {
           <path d="m16 16 4 4" />
         </svg>
         <span className="hidden sm:inline">Search docs</span>
-        <kbd className="ml-auto hidden border border-line px-1.5 text-xs text-faint lg:inline">
+        <kbd className="ml-auto hidden rounded-md border border-line px-1.5 text-xs text-faint lg:inline">
           ⌘K
         </kbd>
       </button>
@@ -92,7 +92,7 @@ export function DocsSearch({ index }: { index: SearchEntry[] }) {
         ref={ref}
         aria-label="Search the docs"
         {...backdropProps}
-        className="fixed inset-x-0 top-0 mx-auto mb-0 mt-[8vh] h-fit max-h-[80vh] w-[min(92vw,40rem)] max-w-none overflow-hidden border border-line bg-bg p-0 text-ink backdrop:bg-scrim"
+        className="fixed inset-x-0 top-0 mx-auto mb-0 mt-[8vh] h-fit max-h-[80vh] w-[min(92vw,40rem)] max-w-none overflow-hidden rounded-2xl border border-line bg-bg p-0 text-ink backdrop:bg-scrim"
       >
         {/* The field has no outline of its own; the rule under it turns dark while it has focus. */}
         <div className="flex items-center gap-3 border-b border-line px-4 focus-within:border-ink">

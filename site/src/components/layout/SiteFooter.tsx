@@ -1,5 +1,8 @@
+import clsx from 'clsx'
 import Link from 'next/link'
 import { Container } from '@/components/Container'
+import { ManageCookies } from '@/components/consent/ManageCookies'
+import { GA_ID } from '@/lib/analytics'
 
 const links = [
   { href: '/trails/', label: 'trails' },
@@ -15,9 +18,30 @@ const links = [
 const link = 'min-h-8 py-1 text-muted underline hover:text-ink pointer-coarse:py-3'
 
 /**
- * One mono line of underlined links, with the year and "top" on the right. The map credit sits
- * under it, the one place it appears on a page; the full notice is on /privacy/.
+ * Who made the site and the map data's credits: OpenStreetMap under the Open Database License and
+ * Copernicus terrain. It closes every page with a footer; the maps page, which has none, carries
+ * a one-line version under its list. The full notice is on /privacy/.
  */
+export function SiteCredit({ className }: { className?: string }) {
+  return (
+    <p className={clsx('text-xs leading-5 text-faint', className)}>
+      Made by{' '}
+      <a href="https://hikaya.io" className="underline hover:text-ink">
+        Hikaya
+      </a>
+      . Maps use data from{' '}
+      <a href="https://www.openstreetmap.org/copyright" className="underline hover:text-ink">
+        OpenStreetMap contributors
+      </a>
+      , available under the Open Database License, with terrain from Copernicus.{' '}
+      <Link href="/privacy/#map-credits" className="underline hover:text-ink">
+        Map credits
+      </Link>
+    </p>
+  )
+}
+
+/** One mono line of underlined links, with the year and "top" on the right, over the credit. */
 export function SiteFooter() {
   return (
     <footer className="mt-24 pb-12 pt-6 text-[13px] text-muted">
@@ -31,6 +55,11 @@ export function SiteFooter() {
                 </Link>
               </li>
             ))}
+            {GA_ID && (
+              <li>
+                <ManageCookies className={`flex cursor-pointer items-center ${link}`} />
+              </li>
+            )}
           </ul>
           <p className="flex items-center gap-x-2 text-faint">
             <span>&copy; {new Date().getFullYear()} Hikaya</span>
@@ -40,20 +69,7 @@ export function SiteFooter() {
             </a>
           </p>
         </div>
-        <p className="mt-4 max-w-xl text-xs leading-5 text-faint">
-          Made by{' '}
-          <a href="https://hikaya.io" className="underline hover:text-ink">
-            Hikaya
-          </a>
-          . Maps use data from{' '}
-          <a href="https://www.openstreetmap.org/copyright" className="underline hover:text-ink">
-            OpenStreetMap contributors
-          </a>
-          , available under the Open Database License, with terrain from Copernicus.{' '}
-          <Link href="/privacy/#map-credits" className="underline hover:text-ink">
-            Map credits
-          </Link>
-        </p>
+        <SiteCredit className="mt-4 max-w-xl" />
       </Container>
     </footer>
   )

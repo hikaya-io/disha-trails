@@ -20,6 +20,13 @@ export function getSiteUrl(): string {
  */
 export const BASE_PATH = (process.env.NEXT_PUBLIC_BASE_PATH ?? '').replace(/\/+$/, '')
 
+/**
+ * Whether search engines may index the site. Off unless the build sets
+ * NEXT_PUBLIC_ALLOW_INDEXING=true: every page is then noindex and robots.txt names no sitemap.
+ * Even when on, only the registered pages in lib/pages.ts are indexed; trail pages never are.
+ */
+export const ALLOW_INDEXING = process.env.NEXT_PUBLIC_ALLOW_INDEXING === 'true'
+
 /** A public/ file's URL with the base path, such as "/disha-trails/map/style-light.json". */
 export function publicPath(path: string): string {
   return `${BASE_PATH}${path}`
@@ -43,3 +50,11 @@ export const TRAIL_REQUESTS_URL =
 export function absoluteUrl(path: string): string {
   return `${getSiteUrl()}${path}`
 }
+
+/** The image every page shares on social sites and in chat previews (scripts/build-og-image.mjs). */
+export const SHARE_IMAGE = {
+  path: '/og/disha.png',
+  width: 1200,
+  height: 630,
+  alt: 'Disha, offline hiking maps and trail guides for iPhone, beside a map of the Tour du Mont Blanc',
+} as const

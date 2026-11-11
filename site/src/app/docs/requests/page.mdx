@@ -5,19 +5,20 @@ export const metadata = pageMetadata('/docs/requests/')
 
 # Request a trail
 
-Disha builds maps and guides for the trails with the most votes. Requests and votes are issues on GitHub, so you need a free GitHub account.
+Disha builds maps and guides for the trails with the most votes. Requests and votes are issues on GitHub so you need a free GitHub account.
 
 ## How requests work
 
-- **One request per trail.** It covers both the map and the guide, so all votes for a trail land in one place. The form asks which you need most.
-- **A vote is a 👍** on the request. Votes are counted once a day.
-- **The most-voted are shortlisted** for the next batch of maps and guides, and show as *shortlisted* or *coming soon*.
+- **One request per trail.** It covers both the map and the guide so all votes for a trail land in one place. The form asks which you need most.
+- **Vote up or down.** A 👍 on the request means build it. A 👎 means it isn't a priority. The [trails page](/trails/) shows both counts and ranks trails by 👍 minus 👎.
+- **Votes are counted once a day.** Each GitHub account counts once per trail, and accounts less than 30 days old don't count. This keeps out throwaway accounts.
+- **The highest-ranked are shortlisted** for the next batch of maps and guides and show as _shortlisted_ or _coming soon_.
 
 ## Request or vote
 
 1. Find the trail on the [trails](/trails/) or [maps](/maps/) page.
-2. If it shows a vote count, open it and add a 👍.
-3. If it shows **Request**, choose it to open a request with the trail filled in.
+2. Choose its votes (▲ ▼) to open the request on GitHub, then add a 👍 or a 👎.
+3. If it has no request yet, the same link opens a new one with the trail filled in.
 4. If it isn't listed, <a href={TRAIL_REQUEST_URL}>open a trail request</a>. A GPX file or an OpenStreetMap link helps most.
 
 See <a href={TRAIL_REQUESTS_URL}>every open request on GitHub</a>.

@@ -38,8 +38,9 @@ import {
  * small pause and replay button (HeroControls). With reduced motion, or before the CSS
  * runs, every element sits in its final state, which is the plan between the two stops.
  *
- * Times are seconds from the page load. The water report and the tent space are made up; the
- * distance, climb and time come from the map's own route and elevation profile.
+ * Times are seconds from the page load. The water report and the tent space are sample data, as
+ * the caption says; the distance, climb and time come from the map's own route and elevation
+ * profile.
  */
 
 const ID = 'hero-trail'
@@ -321,9 +322,7 @@ export function HeroTrail() {
       </div>
 
       <div className="mt-3 flex items-start justify-between gap-4">
-        <p className="text-xs text-faint">
-          Example on the Tour du Mont Blanc. The water report and tent space are made up.
-        </p>
+        <p className="text-xs text-faint">Tour du Mont Blanc · spring to campsite</p>
         <HeroControls target={ID} />
       </div>
     </div>

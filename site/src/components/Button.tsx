@@ -1,11 +1,11 @@
 import Link from 'next/link'
 import clsx from 'clsx'
 
-// Square, mono, caps with wide tracking. Hover uses `not-disabled:` because `:enabled` never
+// Rounded, mono, caps with wide tracking. Hover uses `not-disabled:` because `:enabled` never
 // matches a link. no-underline cancels the link underline that .prose-disha adds, since buttons
 // sit inside long-form pages too.
 const base =
-  'inline-flex min-h-11 items-center justify-center gap-x-2 px-6 font-mono text-[13px] uppercase tracking-[0.18em] no-underline disabled:cursor-not-allowed'
+  'inline-flex min-h-11 items-center justify-center gap-x-2 rounded-lg px-6 font-mono text-[13px] uppercase tracking-[0.18em] no-underline disabled:cursor-not-allowed'
 
 const variants = {
   // One filled button per page, for the main action. The fill turns off-ink on hover. Disabled

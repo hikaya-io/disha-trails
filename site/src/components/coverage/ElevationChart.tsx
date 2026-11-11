@@ -246,7 +246,7 @@ export function ElevationChart({
         <button
           type="button"
           onClick={() => setVisible(true)}
-          className="pointer-events-auto min-h-9 border border-bg/40 bg-bg/45 px-3 font-mono text-[11px] text-ink backdrop-blur-md hover:text-ink-soft pointer-coarse:min-h-11"
+          className="pointer-events-auto min-h-9 rounded-lg border border-bg/40 bg-bg/45 px-3 font-mono text-[11px] text-ink backdrop-blur-md hover:text-ink-soft pointer-coarse:min-h-11"
           aria-label="Show the elevation profile"
         >
           elevation
@@ -256,7 +256,7 @@ export function ElevationChart({
   }
   return (
     // Frosted glass: a light tint and a blur, so the map reads through while the line stays clear.
-    <div className="pointer-events-auto border border-bg/40 bg-bg/45 backdrop-blur-md backdrop-saturate-150">
+    <div className="pointer-events-auto rounded-xl border border-bg/40 bg-bg/45 backdrop-blur-md backdrop-saturate-150">
       <div className="flex items-center justify-between px-3 font-mono text-[11px] text-ink-soft">
         <span>elevation</span>
         <button

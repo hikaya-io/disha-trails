@@ -17,7 +17,7 @@ export function Callout({
 }) {
   const kind = kinds[type]
   return (
-    <aside className="bg-surface px-5 py-4">
+    <aside className="rounded-xl bg-surface px-5 py-4">
       <p className={clsx('text-xs uppercase tracking-[0.08em]', kind.tone)}>{kind.label}</p>
       <div className="mt-1 font-sans text-base [&>p+p]:mt-3 [&>p]:m-0">{children}</div>
     </aside>

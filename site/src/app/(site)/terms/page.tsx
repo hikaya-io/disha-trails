@@ -22,12 +22,12 @@ export default function TermsPage() {
 
         <h2 id="services">Map tiles and guides</h2>
         <p>
-          The map tiles and guides are for the Disha app, this site and other Hikaya sites. Please
+          The map tiles and guides are for the Disha app, this site, and other Hikaya sites. Please
           don't:
         </p>
         <ul>
           <li>use them as the map or guide service for another app or website,</li>
-          <li>download them in bulk, scrape them or mirror them,</li>
+          <li>download them in bulk, scrape them, or mirror them,</li>
           <li>get around the access checks or rate limits on them.</li>
         </ul>
         <p>
@@ -59,16 +59,16 @@ export default function TermsPage() {
 
         <h2 id="safety">Your safety</h2>
         <p>
-          Trails, water sources, huts and conditions change, and the maps, routes and guides may be
-          wrong or out of date. Use them alongside other sources, check current conditions locally
-          and plan for the terrain and weather. You are responsible for your own safety on the
-          trail.
+          Trails, water sources, huts, and conditions change, and the maps, routes, and guides may
+          be wrong or out of date. Use them alongside other sources, check current conditions
+          locally, and plan for the terrain and weather. You are responsible for your own safety on
+          the trail.
         </p>
 
         <h2 id="as-is">No guarantees</h2>
         <p>
           The site and services are provided as they are, without any warranty. They may change, go
-          down or stop. We may update these terms, and the date at the top shows the latest version.
+          down, or stop. We may update these terms and the date at the top shows the latest version.
         </p>
 
         <h2 id="contact">Contact</h2>

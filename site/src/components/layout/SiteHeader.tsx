@@ -14,13 +14,14 @@ const links: NavLink[] = [
 ]
 
 /**
- * Sticky, with a page-colored 80% background and an 8px blur: the one effect on the site. No
- * border, no shadow, no change on scroll. From md the links sit in the bar as mono words; below
+ * Sticky, in glass (.glass-bar in globals.css): the page color at about 70% with what scrolls
+ * under it blurred, as the app's bars are. The maps page's map runs under it. No border, no
+ * shadow, no change on scroll. From md the links sit in the bar as mono words; below
  * md they collapse into a "menu" word that opens a full-screen sheet.
  */
 export function SiteHeader() {
   return (
-    <header className="sticky top-0 z-40 bg-bg/80 backdrop-blur-sm">
+    <header className="glass-bar sticky top-0 z-40">
       <Container className="flex items-center justify-between gap-x-4 py-2">
         <Logo />
         <nav aria-label="Main" className="hidden md:block">

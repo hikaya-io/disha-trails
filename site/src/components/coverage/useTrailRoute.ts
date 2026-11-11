@@ -5,7 +5,7 @@ import type { TrailRoute } from '@/lib/trail-route'
 
 /**
  * A trail's route and elevation profile from public/routes/<id>.json, written by
- * scripts/build-trail-routes.mjs. Pass null when the trail has no file, so nothing is fetched.
+ * scripts/build-trail-routes.mjs from the published guide. Pass null when the trail has no file, so nothing is fetched.
  * Without the file the map still shows the route from the map tiles, from zoom 9.
  */
 export function useTrailRoute(id: string | null): TrailRoute | null {

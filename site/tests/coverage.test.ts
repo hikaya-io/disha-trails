@@ -7,6 +7,7 @@ import {
   countriesOf,
   byVotes,
   editsUrl,
+  formatDay,
   editUrl,
   guideAvailability,
   guideBadge,
@@ -19,20 +20,28 @@ import {
   mapHref,
   mapStage,
   matchesQuery,
+  nearbyTrails,
   requestLabel,
   requestsUrl,
   takesEdits,
   type Trail,
   splitTrailName,
+  TRAIL_DESCRIPTION_MAX,
+  TRAIL_TITLE_MAX,
+  trailDescription,
   trailHref,
+  trailTitle,
   waymarkedUrl,
+  trailAction,
+  voteCounts,
 } from '@/lib/coverage'
 import {
   cellsBounds,
   cellsFC,
   cityBoxesFC,
   centerOf,
-  cityPointsFC,
+  coverageBounds,
+  placePointsFC,
   selectionFC,
   squaresFC,
   tileBounds,
@@ -127,7 +136,8 @@ describe('funnel stages', () => {
     expect(mapStage('live')).toBe('available')
     expect(mapStage('partial')).toBe('available')
     expect(mapStage('planned')).toBe('shortlisted')
-    expect(mapStage('candidate')).toBe('shortlisted')
+    // A candidate has a tile area but isn't in the next batch: not shortlisted.
+    expect(mapStage('candidate')).toBe('popular')
     expect(mapStage('wishlist')).toBe('popular')
   })
 
@@ -152,11 +162,15 @@ describe('funnel stages', () => {
 })
 
 describe('status tags', () => {
-  it('colors maps green when live, yellow when partial and gray otherwise', () => {
+  it('marks maps as available, partial or gray otherwise, drawn like their dot', () => {
     expect(mapBadge('live').tone).toBe('good')
     expect(mapBadge('partial').tone).toBe('warn')
-    expect(mapBadge('candidate')).toMatchObject({ tone: 'none', label: 'Shortlisted' })
+    expect(mapBadge('planned')).toMatchObject({ tone: 'none', label: 'Shortlisted' })
+    expect(mapBadge('candidate')).toMatchObject({ tone: 'none', short: 'No map yet' })
     expect(mapBadge('wishlist')).toMatchObject({ tone: 'none', short: 'No map yet' })
+    // Available and partial are drawn like the place's dot; ink when they stand for both kinds.
+    expect(mapBadge('partial', 'city').mark).toBe('city')
+    expect(mapBadge('live').mark).toBe('any')
   })
 
   it('colors guides green, yellow when coming soon, red when blocked and gray otherwise', () => {
@@ -216,6 +230,35 @@ describe('coverageStats', () => {
     expect(
       coverageStats({ trails, cities: [city('live'), city('partial'), city('candidate')] }),
     ).toEqual({ trailsWithMaps: 1, countries: 1, guides: 1, cities: 2 })
+  })
+})
+
+describe('formatDay', () => {
+  it('reads a build date as day, short month and year', () => {
+    expect(formatDay('2026-11-07')).toBe('7 Nov 2026')
+  })
+  it('has nothing to show for a missing or malformed date', () => {
+    expect(formatDay(null)).toBeNull()
+    expect(formatDay(undefined)).toBeNull()
+    expect(formatDay('20261107')).toBeNull()
+  })
+})
+
+describe('voteCounts', () => {
+  it("reads up and down, and older files' votes as all up", () => {
+    expect(voteCounts({ number: 1, url: 'u', votes: 4, up: 6, down: 2 })).toEqual({
+      up: 6,
+      down: 2,
+    })
+    expect(voteCounts({ number: 1, url: 'u', votes: 3 })).toEqual({ up: 3, down: 0 })
+  })
+
+  it('labels a request with both counts', () => {
+    const trail = { ...kepler, request: { number: 1, url: 'u', votes: 4, up: 6, down: 2 } }
+    expect(trailAction(trail, { repo: 'o/r', requestLabel: 'trail-request' })).toEqual({
+      href: 'u',
+      label: '6 up, 2 down · vote',
+    })
   })
 })
 
@@ -294,7 +337,21 @@ describe('coverage map geometry', () => {
     expect(todo.features).toHaveLength(1)
     expect(cellsFC(data).features).toHaveLength(2)
   })
-  it('puts a city dot at the center of its box', () => {
+  it('bounds every published cell and city, for the opening view', () => {
+    const city: City = {
+      id: 'c',
+      name: 'C',
+      countryCodes: [],
+      status: 'live',
+      bbox: [20, 44, 21, 45],
+      cellIds: [],
+    }
+    expect(coverageBounds({ cells: { a: [-120, 35, -119, 36] }, cities: [city] })).toEqual([
+      -120, 35, 21, 45,
+    ])
+    expect(coverageBounds({ cells: {}, cities: [] })).toBeNull()
+  })
+  it('puts a city point at the center of its box', () => {
     expect(centerOf([4, 52, 6, 53])).toEqual([5, 52.5])
     const city: City = {
       id: 'city-x',
@@ -304,7 +361,20 @@ describe('coverage map geometry', () => {
       bbox: [4, 52, 6, 53],
       cellIds: [],
     }
-    expect(cityPointsFC([city]).features[0].geometry.coordinates).toEqual([5, 52.5])
+    const [point] = placePointsFC([], [city]).features
+    expect(point.geometry.coordinates).toEqual([5, 52.5])
+    expect(point.properties).toMatchObject({ key: 'city-city-x', kind: 'city', built: 'full' })
+  })
+  it('draws trails and cities as the same points, keyed by kind, and skips trails with no area', () => {
+    const points = placePointsFC(
+      [trail({ id: 'gr20', bbox: [8, 41, 10, 43] }), trail({ id: 'none', bbox: null })],
+      [],
+    ).features
+    expect(points.map((p) => p.properties.key)).toEqual(['trail-gr20'])
+    // A trail with nothing built yet is not partial: its dot is drawn as shortlisted.
+    const planned = placePointsFC([trail({ id: 'p', status: 'candidate', bbox: [0, 0, 1, 1] })], [])
+    expect(planned.features[0].properties.built).toBe('none')
+    expect(points[0].geometry.coordinates).toEqual([9, 42])
   })
 })
 
@@ -406,5 +476,72 @@ describe('disha:// tile routing', () => {
     const water = merged.layers.water
     expect(water.length).toBe(2)
     expect([water.feature(0).properties.name, water.feature(1).properties.name]).toEqual(['a', 'b'])
+  })
+})
+
+describe('trail page titles and descriptions', () => {
+  const long = 'Torres del Paine O Circuit and W Trek'
+  const cases = [
+    gr20,
+    trail({
+      name: 'Adlerweg',
+      countries: ['Austria'],
+      status: 'live',
+      guide: 'pending',
+      lengthKm: 413,
+    }),
+    trail({ name: 'GR11', status: 'partial', guide: 'built', lengthKm: 840 }),
+    trail({ name: 'Kepler Track', status: 'planned', guide: 'pending' }),
+    trail({ name: 'Ala Kul', status: 'wishlist', guide: '' }),
+    trail({
+      name: long,
+      countries: ['Chile', 'Argentina'],
+      status: 'live',
+      guide: 'published',
+      lengthKm: 120,
+    }),
+  ]
+
+  it('names what the page offers today', () => {
+    expect(trailTitle(gr20)).toBe('GR20 offline map and guide')
+    expect(trailTitle(cases[1])).toBe('Adlerweg offline hiking map')
+    expect(trailTitle(cases[4])).toBe('Ala Kul offline map and guide')
+    expect(trailDescription(gr20)).toBe(
+      'GR20 (France, 180 km): offline map and trail guide in Disha for iPhone, with the water, huts, and campsites along the route and the distance to each.',
+    )
+    expect(trailDescription(cases[2])).toMatch(/built along part of the route.*coming soon\.$/)
+  })
+
+  it('fits search results, dropping detail from long names', () => {
+    for (const t of cases) {
+      expect(trailTitle(t).length).toBeLessThanOrEqual(TRAIL_TITLE_MAX)
+      expect(trailDescription(t).length).toBeLessThanOrEqual(TRAIL_DESCRIPTION_MAX)
+    }
+    expect(trailTitle(cases[5])).toBe(`${long} offline guide`)
+    expect(trailDescription(cases[5])).not.toContain('Chile, Argentina')
+  })
+})
+
+describe('nearbyTrails', () => {
+  const at = (id: string, lon: number, lat: number) =>
+    trail({ id, bbox: [lon - 0.1, lat - 0.1, lon + 0.1, lat + 0.1] })
+  // A cluster in the Alps and one trail far away in New Zealand.
+  const alps = [at('a', 7, 46), at('b', 7.5, 46), at('c', 8, 46), at('d', 8.5, 46), at('e', 9, 46)]
+  const far = at('nz', 168, -45)
+  const noMap = trail({ id: 'wish' })
+  const all = [...alps, far, noMap]
+
+  it('lists the nearest mapped trails first, without the trail itself', () => {
+    expect(nearbyTrails(alps[0], all, 2).map((t) => t.id)).toEqual(['b', 'c'])
+  })
+
+  it('leaves out trails without a map area, and gives them no list', () => {
+    expect(nearbyTrails(alps[0], all, 10).map((t) => t.id)).not.toContain('wish')
+    expect(nearbyTrails(noMap, all)).toEqual([])
+  })
+
+  it('links every mapped trail from at least one other, even a remote one', () => {
+    const linked = new Set(all.flatMap((t) => nearbyTrails(t, all, 1).map((n) => n.id)))
+    for (const t of [...alps, far]) expect(linked).toContain(t.id)
   })
 })

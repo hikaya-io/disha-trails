@@ -2,14 +2,11 @@ import { describe, expect, it } from 'vitest'
 import { absolutize, MAP_LAYERS, osmClassicStyle, styleUrl } from '@/lib/map/layers'
 import { formatDistance, formatHeight, nearestSample, pointAtKm } from '@/lib/trail-route'
 import {
-  corridorLine,
   cumulativeKm,
-  fillGaps,
+  decodePolyline6,
   haversineKm,
   resample,
   simplify,
-  terrarium,
-  tilePixel,
 } from '../scripts/route-profile.mjs'
 
 describe('map layers', () => {
@@ -91,30 +88,14 @@ describe('route profile build', () => {
       ]).map((k) => Math.round(k)),
     ).toEqual([0, 111, 222])
   })
-  it('joins corridor stages that meet, keeping one copy of each meeting point', () => {
-    const stage = (coordinates: number[][]) => ({
-      type: 'Feature',
-      geometry: { type: 'LineString', coordinates },
-    })
-    const line = corridorLine({
-      type: 'FeatureCollection',
-      features: [
-        stage([
-          [0, 0],
-          [0, 1],
-        ]),
-        stage([
-          [0, 1],
-          [0, 2],
-        ]),
-      ],
-    })
-    expect(line).toEqual([
-      [0, 0],
-      [0, 1],
-      [0, 2],
-    ])
-    expect(() => corridorLine({ type: 'FeatureCollection', features: [] })).toThrow()
+  it('decodes a precision-6 polyline to [lon, lat]', () => {
+    // Google's example line, encoded at precision 6.
+    const line = decodePolyline6('_izlhA~rlgdF_{geC~ywl@_kwzCn`{nI')
+    expect(line).toHaveLength(3)
+    expect(line[0][0]).toBeCloseTo(-120.2, 6)
+    expect(line[0][1]).toBeCloseTo(38.5, 6)
+    expect(line[2][0]).toBeCloseTo(-126.453, 6)
+    expect(line[2][1]).toBeCloseTo(43.252, 6)
   })
   it('resamples evenly and keeps the last point', () => {
     const points = resample(
@@ -127,6 +108,18 @@ describe('route profile build', () => {
     expect(points.map((p) => Math.round(p.km))).toEqual([0, 50, 100, 111])
     expect(points[1].lat).toBeCloseTo(50 / 111.19, 3)
     expect(points.at(-1)).toMatchObject({ lon: 0, lat: 1 })
+  })
+  it('interpolates heights along the line when given them', () => {
+    const points = resample(
+      [
+        [0, 0],
+        [0, 1],
+      ],
+      50,
+      [100, 211.19],
+    )
+    expect(points[1].ele).toBeCloseTo(150, 0)
+    expect(points.at(-1)?.ele).toBe(211.19)
   })
   it('simplifies a straight line to its ends and keeps a real bend', () => {
     expect(
@@ -152,19 +145,5 @@ describe('route profile build', () => {
         10,
       ),
     ).toHaveLength(3)
-  })
-  it('decodes Terrarium heights', () => {
-    expect(terrarium(128, 0, 0)).toBe(0)
-    expect(terrarium(131, 230, 0)).toBe(998)
-  })
-  it('finds the tile and pixel a point falls in', () => {
-    expect(tilePixel(0, 0, 1, 512)).toEqual({ tx: 1, ty: 1, px: 0, py: 0 })
-    expect(tilePixel(-90, 0, 1, 512)).toMatchObject({ tx: 0, px: 256 })
-  })
-  it('fills short gaps in the heights and gives up on long ones or open ends', () => {
-    expect(fillGaps([100, null, 300], 0.5)).toEqual([100, 200, 300])
-    expect(fillGaps([100, null, null, 400], 0.5)).toEqual([100, 200, 300, 400])
-    expect(fillGaps([100, null, null, 400], 0.1)).toBeNull()
-    expect(fillGaps([null, 200, 300], 0.5)).toBeNull()
   })
 })
