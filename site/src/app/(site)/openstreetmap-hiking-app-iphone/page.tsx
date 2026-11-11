@@ -78,12 +78,10 @@ export default function ProductPage() {
             are in the beta. The GR10 and GR11 are on the list.
           </p>
 
-          <h2>Availability and price</h2>
+          <h2>Availability</h2>
           <ul>
             <li>Disha is in beta on TestFlight and needs iOS 17.5 or later.</li>
             <li>It is iPhone only for now.</li>
-            <li>It will be a paid app. Pricing is not final.</li>
-            <li>The trail data stays free to view on the web.</li>
           </ul>
 
           <h2 id="waitlist">Join the beta waitlist</h2>

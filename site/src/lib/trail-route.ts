@@ -1,18 +1,31 @@
 /**
  * A trail's route and elevation profile, from public/routes/<id>.json. scripts/build-trail-routes.mjs
- * writes one per trail that has a line (a disha-guides corridor today), with the elevation read
- * from the published terrain cells, the same model the map's hillshade and contours come from.
+ * writes one per published guide at deploy time, from the guide package's own line and elevations,
+ * so the site shows the same distance and climb as the app and the GPX download.
  */
 
 export type TrailRoute = {
   id: string
-  /** Where the line came from, such as "disha-guides corridor". */
+  /** The guide and package version the line came from, such as "disha-guides gr5 d6f6ab35b5b2". */
   source: string
   lengthKm: number
   /** The line the map draws, simplified, as [lon, lat]. */
   line: [number, number][]
   /** Evenly spaced samples for the chart and the scrub: [km along, metres, lon, lat]. */
   profile: [number, number, number, number][]
+}
+
+/** The box around a line, as [west, south, east, north]. */
+export function boundsOf(line: [number, number][]): [number, number, number, number] | null {
+  if (!line.length) return null
+  let [west, south, east, north] = [Infinity, Infinity, -Infinity, -Infinity]
+  for (const [lon, lat] of line) {
+    west = Math.min(west, lon)
+    east = Math.max(east, lon)
+    south = Math.min(south, lat)
+    north = Math.max(north, lat)
+  }
+  return [west, south, east, north]
 }
 
 export type Units = 'metric' | 'imperial'

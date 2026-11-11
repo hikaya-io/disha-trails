@@ -9,7 +9,7 @@ export type SitePage = {
   path: string
   /** Page title without the site name; the layout's title template adds " | Disha". */
   title: string
-  /** 70 to 160 characters reads well in results. */
+  /** 110 to 160 characters: search results cut longer ones, and some site audits flag shorter ones. */
   description: string
   draft?: boolean
 }
@@ -19,7 +19,7 @@ export const PAGES: readonly SitePage[] = [
     path: '/',
     title: 'Offline hiking app for iPhone, on OpenStreetMap',
     description:
-      'Disha is an offline hiking app for iPhone. Drag along the trail and see the distance to the next water, hut or pass. Join the beta waitlist.',
+      'Disha is an offline hiking app for iPhone. See the distance, climb, and time to the next water, hut, or pass on the GR20, Tour du Mont Blanc, and more.',
   },
   {
     // Draft since 2026-11-08: every section repeated the home page or /trails/. Delete it, or
@@ -27,38 +27,38 @@ export const PAGES: readonly SitePage[] = [
     path: '/openstreetmap-hiking-app-iphone/',
     title: 'OpenStreetMap hiking app for iPhone',
     description:
-      'Disha is an OpenStreetMap hiking app for iPhone. Offline maps, live distance to the next point of interest, a route builder and open trail data.',
+      'Disha is an OpenStreetMap hiking app for iPhone. Offline maps, live distance to the next point of interest, a route builder, and open trail data.',
     draft: true,
   },
   {
     path: '/trails/',
     title: 'Hiking trail guides',
     description:
-      'Curated Disha guides for long-distance hiking trails, with water, huts and campsites along the route. See what is in the app, vote or request a trail.',
+      'Offline guides to long-distance hiking trails in Disha, with the water, huts, and campsites along the way. See what is in the app, vote, or request a trail.',
   },
   {
     path: '/maps/',
     title: 'Offline maps for hiking',
     description:
-      'Offline hiking maps in Disha, along trails and around cities, updated daily. See what is available now, what is next and what hikers have requested.',
+      'Offline hiking maps in Disha along trails and around cities, updated daily. See what is available now, what is next, and what hikers have requested.',
   },
   {
     path: '/docs/',
     title: 'Disha documentation',
     description:
-      'How to use Disha, the offline hiking app for iPhone: get the beta, download an area, install a guide and plan or import a route.',
+      'How to use Disha, the offline hiking app for iPhone: get the beta, download an area, install a guide, and plan or import a route.',
   },
   {
     path: '/docs/getting-started/',
     title: 'Getting started with Disha',
     description:
-      'Join the Disha beta on TestFlight, download an area on Wi-Fi and check that the map, route and elevation profile work in airplane mode.',
+      'Join the Disha beta on TestFlight, download an area on Wi-Fi, and check that the map, route, and elevation profile work in airplane mode.',
   },
   {
     path: '/docs/offline-maps/',
     title: 'Offline maps',
     description:
-      'What a Disha offline area includes, how to download, cancel or delete one, and what to check before you leave without a signal.',
+      'What a Disha offline area includes, how to download, cancel, or delete one, and what to check before you leave without a signal.',
   },
   {
     path: '/docs/guides/',
@@ -70,7 +70,7 @@ export const PAGES: readonly SitePage[] = [
     path: '/docs/offline-maps/coverage/',
     title: 'Where offline maps are available',
     description:
-      'How to read the Disha maps page: which trails and cities have offline maps, what each map status means and how the map cells line up.',
+      'How to read the Disha maps page: which trails and cities have offline maps, what each map status means, and how the map cells line up.',
   },
   {
     path: '/docs/guides/trails/',
@@ -94,19 +94,19 @@ export const PAGES: readonly SitePage[] = [
     path: '/docs/edits/',
     title: 'Suggest an edit to a guide',
     description:
-      'How to report a change on a published Disha guide, such as a dry spring, a closed hut or a reroute, and confirm edits others have reported.',
+      'How to report a change on a published Disha guide, such as a dry spring, a closed hut, or a reroute, and confirm edits others have reported.',
   },
   {
     path: '/docs/open-data/',
     title: 'Open trail data',
     description:
-      'How hikers keep Disha trail guides current: reports on water, snow and stops, votes on reports, season summaries and OpenStreetMap.',
+      'How hikers keep Disha trail guides current: reports on water, snow, and stops, votes on reports, season summaries, and OpenStreetMap.',
   },
   {
     path: '/docs/faq/',
     title: 'Disha FAQ',
     description:
-      'Short answers about Disha: working without a signal, accounts and tracking, where the map data comes from, price and Android.',
+      'Short answers about Disha: working without a signal, accounts and tracking, where the map data comes from, and Android.',
   },
   {
     path: '/docs/support/',
@@ -118,19 +118,19 @@ export const PAGES: readonly SitePage[] = [
     path: '/privacy/',
     title: 'Privacy',
     description:
-      'What the Disha site collects when you join the beta waitlist, who handles it, and how to get off the list.',
+      'What the Disha site collects when you join the beta waitlist, who handles it, how to get off the list, and the credits for the map data.',
   },
   {
     path: '/terms/',
     title: 'Terms of use',
     description:
-      'How you may use the Disha site, its map tiles, guides and trail files, which licenses cover the data, and the limits on the services.',
+      'How you may use the Disha site, its map tiles, guides, and trail files, which licenses cover the data, and the limits on the services.',
   },
   {
     path: '/routes/gr20/',
     title: 'GR20 offline map and guide for iPhone',
     description:
-      'The GR20 in Corsica, north to south from Calenzana to Conca, with an offline map, water points, huts and distance to the next stop in Disha.',
+      'The GR20 in Corsica, north to south from Calenzana to Conca, with an offline map, water points, huts, and distance to the next stop in Disha.',
     draft: true,
   },
 ]

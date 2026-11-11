@@ -4,6 +4,7 @@ import Link from 'next/link'
 import clsx from 'clsx'
 import { Button } from '@/components/Button'
 import { Turnstile } from '@/components/Turnstile'
+import { track } from '@/lib/analytics'
 
 // Same pattern as the Worker's check (website-2.0 worker/waitlist.js EMAIL_PATTERN).
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
@@ -52,6 +53,9 @@ export function Waitlist() {
         }),
       })
       if (!response.ok) throw new Error(`Waitlist request failed with ${response.status}`)
+      // GA4's recommended sign-up event; mark it as a key event in GA. The Worker drops spam
+      // silently and still answers OK, so GA can count a few more than reach Slack.
+      track('sign_up', { method: 'waitlist' })
       setStatus('done')
     } catch {
       setToken(null)
@@ -96,7 +100,7 @@ export function Waitlist() {
         aria-invalid={error ? true : undefined}
         aria-describedby={error ? `${id}-error` : undefined}
         className={clsx(
-          'mt-2 block min-h-11 w-full border bg-bg px-4 text-base focus:border-ink focus:outline-none',
+          'mt-2 block min-h-11 w-full rounded-lg border bg-bg px-4 text-base focus:border-ink focus:outline-none',
           error ? 'border-danger' : 'border-line hover:border-faint',
         )}
       />

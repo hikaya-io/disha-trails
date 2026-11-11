@@ -38,9 +38,9 @@ describe('page registry', () => {
     expect(new Set(titles).size).toBe(titles.length)
   })
 
-  it('gives every page a description of 70 to 160 characters', () => {
+  it('gives every page a description of 110 to 160 characters', () => {
     for (const page of PAGES) {
-      expect(page.description.length, page.path).toBeGreaterThanOrEqual(70)
+      expect(page.description.length, page.path).toBeGreaterThanOrEqual(110)
       expect(page.description.length, page.path).toBeLessThanOrEqual(160)
     }
   })

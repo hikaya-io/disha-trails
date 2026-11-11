@@ -1,13 +1,14 @@
 name: Trail request
-description: Ask for a trail, its offline map or its guide. Add 👍 to an existing request instead.
+description: Ask for a trail, its offline map or its guide. Vote 👍 or 👎 on an existing request instead.
 title: "Trail request: <trail name> [<trail-id>]"
 labels: [trail-request]
 body:
   - type: markdown
     attributes:
       value: |
-        One request per trail. If the trail already has one, add a 👍 to that issue instead of
-        opening a new one: votes decide what is built next, and they only count in one place.
+        One request per trail. If the trail already has one, vote on that issue instead of
+        opening a new one: 👍 to build it, 👎 if it isn't a priority. Votes decide what is built
+        next, and they only count in one place.
 
         Keep the `[trail-id]` in the title: it links this request to the trail's page.
   - type: dropdown

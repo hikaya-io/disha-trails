@@ -3,7 +3,8 @@ import { Container } from '@/components/Container'
 import { SiteFooter } from '@/components/layout/SiteFooter'
 import { SiteHeader } from '@/components/layout/SiteHeader'
 
-export const metadata = { title: 'Page not found', robots: { index: false } }
+// No robots here: Next marks the not-found page noindex itself, and a second tag doubled it.
+export const metadata = { title: 'Page not found' }
 
 export default function NotFound() {
   return (
@@ -12,9 +13,7 @@ export default function NotFound() {
       <main id="main">
         <Container className="pt-24">
           <h1 className="text-4xl font-extrabold tracking-[-0.04em]">That page isn't here</h1>
-          <p className="mt-4 text-lg text-muted">
-            The link may be old, or the page may have moved.
-          </p>
+          <p className="mt-4 text-lg text-muted">The link may be old or the page may have moved.</p>
           <div className="mt-8">
             <Button href="/">Go to the home page</Button>
           </div>

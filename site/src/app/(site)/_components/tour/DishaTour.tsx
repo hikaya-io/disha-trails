@@ -46,7 +46,7 @@ import {
  * component, so the map ships as markup and only the small player is JavaScript. Map
  * data comes from scripts/build-disha-col-map.py. The map's shared SVG defs (MapDefs) are
  * rendered once by the home page, which the hero animation uses too. The water report, the confirmations
- * and the seasons are made up for the illustration.
+ * and the seasons are sample data.
  *
  * Each slide runs four steps of STEP seconds; times below are seconds from the start
  * of the slide. The map stays light in both themes, like the app's basemap.
@@ -471,35 +471,36 @@ const { stage, toRefuge, climb } = ranges
 const slides = [
   {
     tab: 'Offline maps',
-    title: 'Offline-first maps',
+    title: 'Offline maps',
     point:
-      'Maps download in small packages along each trail, so you store only what the trip needs.',
+      'Download your trail before you leave and you have everything you need once the signal drops.',
     steps: [
-      'Once downloaded, the stage works like a paper map, with contours, paths, water, and huts.',
-      `With no signal, the map shows where you are and what’s left: ${stage.km} km, ${fmt(stage.up)} m up, about ${stage.eta.slice(1)}.`,
-      'Everything the stage needs is on your phone before you leave.',
+      'The stage works like a paper map with contours, paths, water, and huts.',
+      `Your position shows on the map with what’s left: ${stage.km} km, ${fmt(stage.up)} m up, about ${stage.eta.slice(1)}.`,
+      'Only the map along your trail is saved so the trip takes little space on your phone.',
     ],
     Scene: OfflineScene,
   },
   {
     tab: 'Open guides',
     title: 'Open guides',
-    point: 'Guides are built on open data, and hikers keep them up to date.',
+    point: 'Every guide starts from OpenStreetMap and hikers keep it up to date.',
     steps: [
-      'At a spring, the guide shows what hikers last reported and the months it usually runs dry.',
-      'At a refuge, hikers confirm what’s there, such as tent sites and hot meals.',
-      'Stops start from OpenStreetMap, and moderators review what hikers add.',
+      'At a spring the guide shows the latest water report and the months it usually runs dry.',
+      'At a refuge hikers confirm what’s there, such as tent sites and hot meals.',
+      'Moderators check what hikers add, and confirmed changes go back to OpenStreetMap so every map built on it gets better.',
     ],
     Scene: GuidesScene,
   },
   {
     tab: 'Plan ahead',
-    title: 'Plan ahead, then navigate',
-    point: 'Plan a route at home and follow it on the trail with no signal.',
+    title: 'Plan ahead, then hike',
+    point:
+      'Study each section before you reach it, from the hardest climb to the next water and decide how you’ll take it on.',
     steps: [
-      `Drag B to where you’ll stop. The distance, climb, and time update as you drag: ${toRefuge.km} km, about ${toRefuge.eta.slice(1)} to the refuge.`,
+      `Drag B to where you’ll stop for the night. The distance, climb, and time update as you drag: ${toRefuge.km} km, about ${toRefuge.eta.slice(1)} to the refuge.`,
       `Drag A to the foot of the climb to see that section alone: ${climb.km} km and ${fmt(climb.up)} m up.`,
-      'The plan is saved with the map, so it works offline.',
+      'Do the same for every stage and you know the whole trail before you reach the trailhead.',
     ],
     Scene: PlanScene,
   },

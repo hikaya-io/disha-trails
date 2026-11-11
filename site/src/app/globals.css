@@ -5,9 +5,10 @@
 
 /*
  * The raw look (after the raw-ui skill, with Disha's own type and violet): mono for most text, a
- * heavy sans for titles, square corners, no motion, no shadows, underlined links. Hovers are
- * black and white: muted text turns ink, ink text turns ink-soft. The violet accent (#7C3AED
- * light, #8B5CF6 dark) is only for links inside sentences, the selected item and map data.
+ * heavy sans for titles, soft rounded corners, no motion, no shadows, underlined links. The maps
+ * page is the exception: glass over its map (.glass), its panel's slide and the map's flights
+ * between places. Hovers are black and white: muted text turns ink, ink text turns ink-soft. The
+ * violet accent (#7C3AED light, #8B5CF6 dark) is only for links inside sentences, the selected item and map data.
  *
  * Color roles: off-black ink on an off-white page, and the reverse in dark mode. Components use
  * the role names (bg-bg, text-muted), never raw zinc or violet classes. Dark values switch with
@@ -30,13 +31,24 @@
   /* zinc-200 */
   --accent: #7c3aed;
   --accent-text: #6d28d9;
-  /* City dots on the maps: pink-600, violet's warm neighbour. */
+  /* Map dots: cities pink-600, violet's warm neighbour; trails teal-600, across the wheel from the
+     pink. Solid when the map is complete, a ring around the -fill (pink-200, teal-200) when
+     partial. */
   --city: #db2777;
+  --city-fill: #fbcfe8;
+  --trail: #0d9488;
+  --trail-fill: #99f6e4;
   --danger: #be123c;
   /* The dimmed page behind a dialog */
   --scrim: rgb(24 24 27 / 0.4);
   /* Land squares on the coverage map: one step darker than --line so the coastlines read. */
   --land: #d4d4d8;
+  /* Glass over the map (see .glass) */
+  --glass-fill: rgb(250 250 250 / 0.72);
+  --glass-edge: rgb(255 255 255 / 0.8);
+  /* Lines on glass: translucent ink, so they show on whatever the glass lets through */
+  --glass-line: rgb(24 24 27 / 0.14);
+  --glass-shadow: 0 10px 36px rgb(24 24 27 / 0.16);
   /* Status tags: darker text on a light fill. Green available, yellow partial or coming soon,
      red blocked, gray not yet. Each text color passes 4.5:1 on its fill. */
   --good-ink: #166534;
@@ -73,9 +85,17 @@
   --accent: #8b5cf6;
   --accent-text: #c4b5fd;
   --city: #f472b6;
+  /* pink-900 and teal-900: on a dark map a light fill glows, so a partial ring reads as a dot */
+  --city-fill: #831843;
+  --trail: #2dd4bf;
+  --trail-fill: #134e4a;
   --danger: #fda4af;
   --scrim: rgb(0 0 0 / 0.6);
   --land: #3f3f46;
+  --glass-fill: rgb(24 24 27 / 0.7);
+  --glass-edge: rgb(255 255 255 / 0.1);
+  --glass-line: rgb(255 255 255 / 0.14);
+  --glass-shadow: 0 10px 36px rgb(0 0 0 / 0.45);
   --good-ink: #86efac;
   /* green-300 on green-950 */
   --good-bg: #052e16;
@@ -101,6 +121,9 @@
   --color-accent: var(--accent);
   --color-link: var(--accent-text);
   --color-city: var(--city);
+  --color-city-fill: var(--city-fill);
+  --color-trail: var(--trail);
+  --color-trail-fill: var(--trail-fill);
   --color-danger: var(--danger);
   --color-scrim: var(--scrim);
   --color-land: var(--land);
@@ -113,16 +136,14 @@
   --color-none-ink: var(--none-ink);
   --color-none-bg: var(--none-bg);
   --font-sans: var(--font-dm-sans), ui-sans-serif, system-ui, sans-serif;
-  --font-mono: var(--font-dm-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
-  /* Square corners everywhere. Only rounded-full stays round, for a dot. */
-  --radius-xs: 0;
-  --radius-sm: 0;
-  --radius-md: 0;
-  --radius-lg: 0;
-  --radius-xl: 0;
-  --radius-2xl: 0;
-  --radius-3xl: 0;
-  --radius-4xl: 0;
+  --font-mono: var(--font-red-hat-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
+  /* Soft corners, after the app: controls and tags 8px (lg), cards and menus 12px (xl), the
+     floating panel and dialogs 16px (2xl); pills and dots are rounded-full. */
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+  --radius-xl: 12px;
+  --radius-2xl: 16px;
 }
 
 html {
@@ -142,7 +163,6 @@ body {
 /* In the base layer so a utility such as focus:outline-none can replace it. Unlayered, it beat
    every utility and drew a violet box around the search field and form inputs. */
 @layer base {
-
   h1,
   h2,
   h3 {
@@ -176,7 +196,7 @@ body {
     color: var(--muted);
   }
 
-  .prose-disha>*+* {
+  .prose-disha > * + * {
     margin-top: 1.25rem;
   }
 
@@ -226,7 +246,7 @@ body {
     padding-left: 1.25rem;
   }
 
-  .prose-disha li+li {
+  .prose-disha li + li {
     margin-top: 0.5rem;
   }
 
@@ -256,4 +276,39 @@ body {
  */
 .maplibregl-map {
   font-family: var(--font-mono);
+}
+
+/*
+ * Glass, for what floats over a map: the maps page's panel, tab, scorecard and dot cards. After the app's
+ * dishaGlass fallback (disha-ios DesignSystem/Glass): a see-through fill with the map blurred
+ * behind it, a light top edge and a soft shadow. The one place the site uses a shadow; corners
+ * stay square. With Reduce Transparency it is the plain page color.
+ */
+@utility glass {
+  background: var(--glass-fill);
+  -webkit-backdrop-filter: blur(20px) saturate(1.6);
+  backdrop-filter: blur(20px) saturate(1.6);
+  border: 1px solid var(--glass-line);
+  /* Lines inside glass (rows, dividers) use the glass line too: the page's own --line, a flat
+     light gray, all but disappears on it. */
+  --line: var(--glass-line);
+  box-shadow:
+    inset 0 1px 0 var(--glass-edge),
+    var(--glass-shadow);
+}
+
+/* The same glass without an edge or shadow, for the sticky site header on every page. */
+@utility glass-bar {
+  background: var(--glass-fill);
+  -webkit-backdrop-filter: blur(20px) saturate(1.6);
+  backdrop-filter: blur(20px) saturate(1.6);
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .glass,
+  .glass-bar {
+    background: var(--bg);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
 }

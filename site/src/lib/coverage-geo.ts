@@ -3,7 +3,7 @@
  * only hands the results to MapLibre. Bounds are [west, south, east, north] in degrees.
  */
 import type { Feature, FeatureCollection, Point, Polygon } from 'geojson'
-import type { Bounds, City, CoverageData } from '@/lib/coverage'
+import type { Bounds, City, CoverageData, Trail } from '@/lib/coverage'
 
 type Boxes = FeatureCollection<Polygon, Record<string, string>>
 type Points = FeatureCollection<Point, Record<string, string>>
@@ -114,19 +114,54 @@ export function selectionFC(
   return { built: boxesFC(built), todo: boxesFC(todo) }
 }
 
+/**
+ * The box around every published cell and every city: where the maps are, which the world map
+ * opens on and returns to. Null when there are none.
+ */
+export function coverageBounds(data: Pick<CoverageData, 'cells' | 'cities'>): Bounds | null {
+  const boxes = [...Object.values(data.cells), ...data.cities.map((c) => c.bbox)]
+  if (boxes.length === 0) return null
+  return [
+    Math.min(...boxes.map((b) => b[0])),
+    Math.min(...boxes.map((b) => b[1])),
+    Math.max(...boxes.map((b) => b[2])),
+    Math.max(...boxes.map((b) => b[3])),
+  ]
+}
+
 /** Center of a bounding box. */
 export function centerOf([w, s, e, n]: Bounds): [number, number] {
   return [(w + e) / 2, (s + n) / 2]
 }
 
-/** One point per city, at the center of its box. */
-export function cityPointsFC(cities: City[]): Points {
+/** The key a trail or city goes by in lists and on the map: "trail-<id>" or "city-<id>". */
+export function placeKey(kind: 'trail' | 'city', id: string): string {
+  return `${kind}-${id}`
+}
+
+/**
+ * One point per trail and city, at the center of its box, with its kind and whether its map is
+ * complete, which set its color and shape. A trail with no map area yet has no box and no point.
+ */
+export function placePointsFC(trails: Trail[], cities: City[]): Points {
+  const places = [
+    ...trails.flatMap((t) => (t.bbox ? [{ kind: 'trail' as const, ...t, bbox: t.bbox }] : [])),
+    ...cities.map((c) => ({ kind: 'city' as const, ...c })),
+  ]
   return {
     type: 'FeatureCollection',
-    features: cities.map((c) => ({
+    features: places.map((p) => ({
       type: 'Feature',
-      properties: { id: c.id, name: c.name, status: c.status },
-      geometry: { type: 'Point', coordinates: centerOf(c.bbox) },
+      properties: {
+        key: placeKey(p.kind, p.id),
+        kind: p.kind,
+        id: p.id,
+        name: p.name,
+        // How much of its map is built, which sets the dot: "full" solid, "partial" a ring in its
+        // color, "none" (shortlisted, nothing built yet) a gray ring, as its gray tag.
+        built: p.status === 'live' ? 'full' : p.status === 'partial' ? 'partial' : 'none',
+      },
+      geometry: { type: 'Point', coordinates: centerOf(p.bbox) },
     })),
   }
 }
@@ -138,7 +173,12 @@ export function cityBoxesFC(cities: City[]): Boxes {
     features: cities.flatMap((c) => {
       const bounds = cellsBounds(c.cellIds)
       return bounds
-        ? [box(bounds, { id: c.id, name: c.name }) as Feature<Polygon, Record<string, string>>]
+        ? [
+            box(bounds, { key: placeKey('city', c.id), id: c.id, name: c.name }) as Feature<
+              Polygon,
+              Record<string, string>
+            >,
+          ]
         : []
     }),
   }

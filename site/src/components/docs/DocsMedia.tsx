@@ -28,7 +28,7 @@ export function DocsMedia({
   if (src) {
     return (
       <figure className="my-8">
-        <div className="overflow-hidden border border-line bg-surface">
+        <div className="overflow-hidden rounded-xl border border-line bg-surface">
           <img
             src={src}
             alt={alt || title}
@@ -46,7 +46,7 @@ export function DocsMedia({
   }
   if (process.env.NODE_ENV === 'production') return null
   return (
-    <aside className="my-8 border border-dashed border-faint bg-surface p-5 text-sm">
+    <aside className="my-8 rounded-xl border border-dashed border-faint bg-surface p-5 text-sm">
       <p className="text-xs uppercase tracking-widest text-muted">
         {kind === 'gif' ? 'GIF placeholder' : 'Screenshot placeholder'} (development only)
       </p>

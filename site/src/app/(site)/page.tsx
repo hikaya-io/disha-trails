@@ -1,4 +1,3 @@
-import Link from 'next/link'
 import { AppIcon } from '@/components/AppIcon'
 import { Button } from '@/components/Button'
 import { Container } from '@/components/Container'
@@ -11,9 +10,6 @@ import { HeroTrail } from './_components/tour/HeroTrail'
 import { MapDefs } from './_components/tour/scene-parts'
 
 export const metadata = pageMetadata('/')
-
-const linkClass =
-  'text-ink underline decoration-line underline-offset-4 hover:text-link hover:decoration-link'
 
 function Section({
   id,
@@ -72,11 +68,11 @@ export default function HomePage() {
                 <p className="text-sm text-muted">Offline hiking app for iPhone</p>
               </div>
               <h1 className="mt-4 text-4xl font-extrabold tracking-[-0.04em] text-balance sm:text-5xl">
-                Know how far it is to the next water, hut or pass.
+                Know what&apos;s ahead on the trail.
               </h1>
               <p className="mt-6 max-w-xl text-xl text-muted">
-                Disha is an offline hiking app for iPhone. It shows the distance, climb and time
-                from where you are to the next stop, with no signal.
+                Disha puts the map, the trail guide, and the latest reports from other hikers in one
+                app, all offline.
               </p>
               <div className="mt-8 flex flex-wrap gap-3">
                 <Button href="/#waitlist">Join the beta waitlist</Button>
@@ -94,13 +90,8 @@ export default function HomePage() {
         <Container>
           <div className="max-w-2xl">
             <h2 className="text-2xl font-extrabold tracking-[-0.04em] sm:text-3xl">
-              How Disha works on the trail
+              How Disha works
             </h2>
-            <p className="mt-4 text-lg text-muted">
-              This example follows a real stage of the Tour du Mont Blanc, from Notre-Dame de la
-              Gorge over the Col du Bonhomme to Les Chapieux. The water report, confirmations and
-              seasons are made up.
-            </p>
           </div>
           <div className="mt-10">
             <DishaTour />
@@ -108,20 +99,21 @@ export default function HomePage() {
         </Container>
       </section>
 
-      <Section title="Starting with long routes in Europe">
+      <Section title="Offline maps and guides for Europe's long-distance trails">
         <p>
-          Disha starts with Europe&apos;s waymarked long routes, such as the GR trails in France,
-          Spain and Portugal. The{' '}
-          <Link href="/trails/" className={linkClass}>
-            trails list
-          </Link>{' '}
-          shows which have a guide, and the{' '}
-          <Link href="/maps/" className={linkClass}>
-            maps page
-          </Link>{' '}
-          shows where you can download offline maps.
+          Disha starts with Europe&apos;s long-distance trails: the GR20 in Corsica and the Tour du
+          Mont Blanc, then the GR10 and GR11 across the Pyrenees. Each guide lists the water, huts,
+          and campsites along the trail with what hikers last reported.
         </p>
-        <p>The maps come from OpenStreetMap, so anyone can check the data and fix mistakes.</p>
+        {/* -ml-6 lines the text of the two link buttons up with the paragraph above */}
+        <div className="-ml-6 flex flex-wrap pt-2">
+          <Button href="/trails/" variant="secondary">
+            See available trail guides
+          </Button>
+          <Button href="/maps/" variant="secondary">
+            See offline map coverage
+          </Button>
+        </div>
       </Section>
 
       <Section id="waitlist" title="Join the beta waitlist">

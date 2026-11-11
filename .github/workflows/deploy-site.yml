@@ -38,6 +38,10 @@ jobs:
       NEXT_PUBLIC_SITE_URL: ${{ vars.NEXT_PUBLIC_SITE_URL || 'https://hikaya-io.github.io/disha-trails' }}
       NEXT_PUBLIC_CONTACT_API_URL: ${{ vars.NEXT_PUBLIC_CONTACT_API_URL }}
       NEXT_PUBLIC_TURNSTILE_SITE_KEY: ${{ vars.NEXT_PUBLIC_TURNSTILE_SITE_KEY }}
+      # Empty until the Disha GA4 property exists: no banner, no analytics (see site/.env.example).
+      NEXT_PUBLIC_GA_ID: ${{ vars.NEXT_PUBLIC_GA_ID }}
+      # Every page is noindex until this repo variable is "true" (see site/.env.example).
+      NEXT_PUBLIC_ALLOW_INDEXING: ${{ vars.NEXT_PUBLIC_ALLOW_INDEXING }}
     steps:
       - uses: actions/checkout@v7
         with:
@@ -76,6 +80,9 @@ jobs:
           cache-dependency-path: site/yarn.lock
 
       - run: yarn install --frozen-lockfile
+      # The route lines and elevation profiles, from the published guide packages on
+      # guides.hikaya.app (not committed). Fails when a published guide isn't in the catalog.
+      - run: node scripts/build-trail-routes.mjs
       - run: yarn lint:check
       - run: yarn test
       - run: yarn build

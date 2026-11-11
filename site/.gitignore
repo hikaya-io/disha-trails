@@ -7,3 +7,5 @@ out
 next-env.d.ts
 public/coverage-local.json
 public/coverage.json
+# Written by scripts/build-trail-routes.mjs from the published guides (the deploy runs it).
+public/routes/
