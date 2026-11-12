@@ -124,7 +124,7 @@ export function Waitlist() {
         className="mt-4"
         disabled={!token || !email.trim() || status === 'sending'}
       >
-        {status === 'sending' ? 'Joining…' : 'Join the waitlist'}
+        {status === 'sending' ? 'Joining…' : 'Join waitlist'}
       </Button>
       <p className="mt-4 text-sm text-muted" aria-live="polite">
         {status === 'failed' && (

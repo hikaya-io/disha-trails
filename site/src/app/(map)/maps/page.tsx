@@ -10,7 +10,7 @@ const PATH = '/maps/'
 export const metadata = pageMetadata(PATH)
 
 // The panel's padding while the list loads, as in MapsSection's PANEL_PAD.
-const PANEL_PAD = 'px-6 sm:px-8 lg:px-4'
+const PANEL_PAD = 'px-4 sm:px-6 lg:px-4'
 
 export default function MapsPage() {
   const header = (

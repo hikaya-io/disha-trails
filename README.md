@@ -4,21 +4,21 @@ Trail routes and boundary data for maps. The GPX files are free to download. See
 
 ## Request a trail
 
-Disha's offline maps and guides grow by request. Everything runs on GitHub issues, with two
-templates and nothing else:
+Disha's offline maps and guides grow by request. Requests and edits are GitHub issues with two
+templates:
 
 - **[Trail request](https://github.com/hikaya-io/disha-trails/issues/new?template=trail-request.yml)**
   (`trail-request`): a trail with no map or guide yet. One request per trail, so its votes stay in
-  one place. A 👍 votes it up and a 👎 votes it down. The daily build counts both, skipping GitHub
-  accounts under 30 days old, and the site ranks trails by 👍 minus 👎. The highest are built next.
+  one place. A 👍 votes it up and a 👎 votes it down. The daily build counts both and skips GitHub
+  accounts under 30 days old. The site ranks trails by 👍 minus 👎, and the highest are built next.
 - **[Trail edit](https://github.com/hikaya-io/disha-trails/issues/new?template=trail-edit.yml)**
-  (`trail-edit`): something wrong on a published guide, such as a dry spring, a closed hut, a
-  reroute or a wrong distance. A 👍 confirms it.
+  (`trail-edit`): a change to a published guide, such as a dry spring, a closed hut, a reroute or
+  a wrong distance. A 👍 confirms it.
 
-Both titles end in `[trail-id]`, which ties the issue to its trail. The site's buttons only fill in
-those forms; what a button is about goes in the title, such as `Trail edit (route): …`, because a
-link can always prefill the title but not a dropdown. Add a topic, never a new template or label.
-The `trail-edit` label has to exist in the repo for the template to apply it.
+Both titles end in `[trail-id]`, which ties the issue to its trail. The site's buttons open these
+forms. A link can prefill the title but not a dropdown, so a button's topic goes in the title, such
+as `Trail edit (route): …`. New topics go in the title; don't add templates or labels. The
+`trail-edit` label must exist in the repo for the template to apply it.
 
 `coverage.json` is rebuilt daily in the private disha-tiles repo and pushed, with the old
 standalone dashboard (`index.html`), to the root of this repo's `coverage-data` branch; don't edit

@@ -50,7 +50,7 @@
   --glass-line: rgb(24 24 27 / 0.14);
   --glass-shadow: 0 10px 36px rgb(24 24 27 / 0.16);
   /* Status tags: darker text on a light fill. Green available, yellow partial or coming soon,
-     red blocked, gray not yet. Each text color passes 4.5:1 on its fill. */
+     gray not yet. Each text color passes 4.5:1 on its fill. */
   --good-ink: #166534;
   /* green-800 */
   --good-bg: #dcfce7;
@@ -59,10 +59,6 @@
   /* amber-800 */
   --warn-bg: #fef3c7;
   /* amber-100 */
-  --bad-ink: #9f1239;
-  /* rose-800 */
-  --bad-bg: #ffe4e6;
-  /* rose-100 */
   --none-ink: #52525b;
   --none-bg: #f0f0f2;
   color-scheme: light;
@@ -102,9 +98,6 @@
   --warn-ink: #fcd34d;
   /* amber-300 on amber-950 */
   --warn-bg: #451a03;
-  --bad-ink: #fda4af;
-  /* rose-300 on rose-950 */
-  --bad-bg: #4c0519;
   --none-ink: #a1a1aa;
   --none-bg: #27272a;
   color-scheme: dark;
@@ -131,8 +124,6 @@
   --color-good-bg: var(--good-bg);
   --color-warn-ink: var(--warn-ink);
   --color-warn-bg: var(--warn-bg);
-  --color-bad-ink: var(--bad-ink);
-  --color-bad-bg: var(--bad-bg);
   --color-none-ink: var(--none-ink);
   --color-none-bg: var(--none-bg);
   --font-sans: var(--font-dm-sans), ui-sans-serif, system-ui, sans-serif;

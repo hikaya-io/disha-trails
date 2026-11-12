@@ -84,7 +84,7 @@ export default function ProductPage() {
             <li>It is iPhone only for now.</li>
           </ul>
 
-          <h2 id="waitlist">Join the beta waitlist</h2>
+          <h2 id="waitlist">Join beta waitlist</h2>
           <p>Sign up and we'll email an invite when seats open.</p>
           <div className="pt-2">
             <Waitlist />

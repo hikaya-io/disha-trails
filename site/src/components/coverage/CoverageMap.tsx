@@ -798,7 +798,7 @@ export function CoverageMap({
         className={
           variant === 'world'
             ? 'glass group absolute z-10 rounded-full py-1 pr-2 pl-4'
-            : clsx('mt-3', panel && 'px-6 sm:px-8 lg:mt-2 lg:px-4 lg:pb-2')
+            : clsx('mt-3', panel && 'px-4 sm:px-6 lg:mt-2 lg:px-4 lg:pb-2')
         }
         // Clear of the panel on the left, if it reaches that far on a narrow window.
         style={

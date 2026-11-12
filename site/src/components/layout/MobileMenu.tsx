@@ -64,7 +64,7 @@ export function MobileMenu({ links }: { links: NavLink[] }) {
         </nav>
         <div className="mt-8">
           <Button href="/#waitlist" onClick={close}>
-            Join the beta waitlist
+            Join beta waitlist
           </Button>
         </div>
       </dialog>

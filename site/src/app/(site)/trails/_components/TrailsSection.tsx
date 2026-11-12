@@ -20,7 +20,7 @@ import {
 } from '@/lib/coverage'
 
 // The guide funnel, most available first. Trails with no guide row are only on /maps/.
-const STATUSES: StatusOption[] = ['published', 'built', 'pending', 'blocked'].map((value) => ({
+const STATUSES: StatusOption[] = ['published', 'built', 'pending'].map((value) => ({
   value,
   badge: guideBadge(value),
 }))
@@ -59,7 +59,7 @@ function row(trail: Trail, data: TrailsData): CatalogRow {
 
 /**
  * The guide catalog, ranked by votes (up minus down). It opens on the guides in the app, coming
- * soon and planned, so the trails people can vote on are in view; blocked ones are a chip away. It renders from the build's
+ * soon and planned. It renders from the build's
  * copy of the data (`initial`), so the trail names and links are in the HTML for search engines,
  * then switches to the live coverage.json once it loads.
  */

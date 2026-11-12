@@ -25,6 +25,8 @@ export function DocsShell({
   children: React.ReactNode
 }) {
   const [collapsed, setCollapsed] = useState(false)
+  // Slide only after a click: a remembered "hidden" must not animate shut on every page load.
+  const [animate, setAnimate] = useState(false)
 
   useEffect(() => {
     try {
@@ -34,7 +36,8 @@ export function DocsShell({
     }
   }, [])
 
-  const toggle = () =>
+  const toggle = () => {
+    setAnimate(true)
     setCollapsed((was) => {
       try {
         localStorage.setItem(STORAGE_KEY, was ? 'open' : 'collapsed')
@@ -43,19 +46,30 @@ export function DocsShell({
       }
       return !was
     })
+  }
 
   return (
     <SidebarContext.Provider value={{ collapsed, toggle }}>
       <aside
         id="docs-sidebar"
         className={clsx(
-          'hidden overflow-y-auto border-r border-line bg-surface px-5 pb-8 pt-2 lg:fixed lg:inset-y-0 lg:left-0 lg:z-40 lg:w-60 lg:flex-col',
-          collapsed ? 'lg:hidden' : 'lg:flex',
+          'hidden overflow-y-auto border-r border-line bg-surface px-5 pb-8 pt-2 lg:fixed lg:inset-y-0 lg:left-0 lg:z-40 lg:flex lg:w-60 lg:flex-col',
+          animate &&
+            'lg:transition-[transform,visibility] lg:duration-500 lg:ease-in-out motion-reduce:transition-none',
+          collapsed && 'lg:invisible lg:-translate-x-full',
         )}
       >
         {sidebar}
       </aside>
-      <div className={clsx(!collapsed && 'lg:pl-60')}>{children}</div>
+      <div
+        className={clsx(
+          collapsed ? 'lg:pl-0' : 'lg:pl-60',
+          animate &&
+            'lg:transition-[padding] lg:duration-500 lg:ease-in-out motion-reduce:transition-none',
+        )}
+      >
+        {children}
+      </div>
     </SidebarContext.Provider>
   )
 }

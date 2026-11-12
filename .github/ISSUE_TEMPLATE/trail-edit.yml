@@ -1,16 +1,15 @@
 name: Trail edit
-description: Suggest an edit to a published Disha guide, such as a dry spring, a closed hut or a reroute. Add 👍 to an edit you've seen too.
+description: Suggest a change to a published guide, like a dry spring, a closed hut or a reroute.
 title: "Trail edit: <trail name> [<trail-id>]"
 labels: [trail-edit]
 body:
   - type: markdown
     attributes:
       value: |
-        Check the trail's [open edits](https://github.com/hikaya-io/disha-trails/issues?q=is%3Aissue+is%3Aopen+label%3Atrail-edit) first.
-        If someone has reported the same thing, add a 👍 to that issue instead of opening a new
-        one. A 👍 says you've seen it too, and the most-confirmed edits are made first.
+        Check the [open edits](https://github.com/hikaya-io/disha-trails/issues?q=is%3Aissue+is%3Aopen+label%3Atrail-edit) first.
+        If someone already reported it, add a 👍 to that issue. Edits with the most 👍 are made first.
 
-        Keep the `[trail-id]` in the title: it links this edit to the trail's page.
+        Keep the `[trail-id]` in the title so the edit shows on the trail's page.
   - type: dropdown
     id: kind
     attributes:
@@ -29,30 +28,26 @@ body:
     id: where
     attributes:
       label: Where
-      description: A stop's name, a distance along the trail, coordinates or an OpenStreetMap link.
-      placeholder: "e.g. Refuge de Petra Piana, or km 84 from Calenzana, or 42.2381, 9.0583"
+      description: A stop's name, a distance along the trail, coordinates or a map link.
+      placeholder: "e.g. Refuge de Petra Piana, or km 84 from Calenzana"
     validations:
       required: true
   - type: textarea
     id: what
     attributes:
       label: What's wrong or new?
-      description: What you saw, and what the guide should say instead.
-      placeholder: |
-        e.g. The guide says 6.2 km from the refuge to the spring; it's closer to 4.5 km.
-        e.g. The spring below the col was dry in late August.
-        e.g. The trail now skips the gorge after a landslide; the detour adds about an hour.
-        e.g. There's a signed low-level alternate through the valley for bad weather.
+      description: What you saw and what the guide should say instead.
+      placeholder: "e.g. The spring below the col was dry in late August."
     validations:
       required: true
   - type: input
     id: when
     attributes:
       label: When did you see it?
-      description: A date, or a month and year. Conditions change with the season.
+      description: A date, or a month and year.
       placeholder: "e.g. 2026-08-24, or August 2026"
   - type: textarea
     id: source
     attributes:
       label: Photo, GPX or source
-      description: Drop a photo or a GPX file here, or link a notice from a park, trail association or hut.
+      description: Add a photo or GPX file, or link a notice from a park, trail group or hut.

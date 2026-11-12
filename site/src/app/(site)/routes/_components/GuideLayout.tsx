@@ -43,7 +43,7 @@ export function GuideLayout({ guide, children }: { guide: Guide; children: React
           </h1>
           <p className="text-xl">{guide.lead}</p>
           {children}
-          <h2 id="waitlist">Join the beta waitlist</h2>
+          <h2 id="waitlist">Join beta waitlist</h2>
           <p>Disha is in beta on TestFlight for iPhone. Sign up and we'll email an invite.</p>
           <div className="pt-2">
             <Waitlist />

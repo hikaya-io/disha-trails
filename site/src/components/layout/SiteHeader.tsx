@@ -32,7 +32,7 @@ export function SiteHeader() {
                 href="/#waitlist"
                 className="flex min-h-11 items-center px-3 text-muted hover:text-ink hover:underline"
               >
-                join the waitlist
+                join waitlist
               </Link>
             </li>
             <li>

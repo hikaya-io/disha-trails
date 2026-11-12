@@ -45,7 +45,7 @@ export default async function DocsLayout({ children }: { children: React.ReactNo
               href="/#waitlist"
               className="hidden min-h-11 items-center px-2 text-sm text-muted hover:text-ink md:flex"
             >
-              Join the waitlist
+              Join waitlist
             </Link>
             <ThemeToggle />
           </div>

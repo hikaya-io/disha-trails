@@ -100,7 +100,7 @@ const kepler = trail({
   countryCodes: ['NZ'],
   continent: 'Oceania',
   status: 'wishlist',
-  guide: 'blocked',
+  guide: 'pending',
   lengthKm: 60,
   request: { number: 2, url: 'u', votes: 7 },
 })
@@ -115,10 +115,10 @@ describe('availability', () => {
     }
   })
 
-  it('treats only published guides as available, and blocked as still to do', () => {
+  it('treats only published guides as available, and pending as still to do', () => {
     expect(guideAvailability('published')).toBe('available')
     expect(guideAvailability('built')).toBe('soon')
-    expect(guideAvailability('blocked')).toBe('planned')
+    expect(guideAvailability('pending')).toBe('planned')
     expect(guideAvailability('retired')).toBe('none')
     expect(guideAvailability('')).toBe('none')
   })
@@ -145,7 +145,6 @@ describe('funnel stages', () => {
     expect(guideStage('published')).toBe('available')
     expect(guideStage('built')).toBe('shortlisted')
     expect(guideStage('pending')).toBe('popular')
-    expect(guideStage('blocked')).toBe('popular')
     expect(guideStage('retired')).toBeNull()
     expect(guideStage('')).toBeNull()
   })
@@ -173,10 +172,9 @@ describe('status tags', () => {
     expect(mapBadge('live').mark).toBe('any')
   })
 
-  it('colors guides green, yellow when coming soon, red when blocked and gray otherwise', () => {
+  it('colors guides green, yellow when coming soon and gray otherwise', () => {
     expect(guideBadge('published').tone).toBe('good')
     expect(guideBadge('built')).toMatchObject({ tone: 'warn', label: 'Coming soon' })
-    expect(guideBadge('blocked').tone).toBe('bad')
     expect(guideBadge('pending').tone).toBe('none')
     expect(guideBadge('')).toMatchObject({ tone: 'none', short: 'No guide' })
   })

@@ -15,7 +15,6 @@ const ROWS: Record<'map' | 'guide', Array<[Badge, string]>> = {
     [guideBadge('published'), 'Install it in the app.'],
     [guideBadge('built'), 'Ready and coming in the next release.'],
     [guideBadge('pending'), 'Requested. Votes decide what is made next.'],
-    [guideBadge('blocked'), 'Its OpenStreetMap route has gaps to fix first.'],
     [guideBadge(''), 'No guide planned. The trail may still have an offline map.'],
   ],
 }

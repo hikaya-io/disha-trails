@@ -4,7 +4,6 @@ import type { Badge, Tone } from '@/lib/coverage'
 const tones: Record<Tone, string> = {
   good: 'bg-good-bg text-good-ink',
   warn: 'bg-warn-bg text-warn-ink',
-  bad: 'bg-bad-bg text-bad-ink',
   none: 'bg-none-bg text-none-ink',
 }
 

@@ -38,8 +38,8 @@ export default function PrivacyPage() {
             <ul>
               <li>
                 <strong>Essential, always on.</strong> Your browser&apos;s storage keeps your cookie
-                choice and your light or dark theme. The waitlist&apos;s bot check is described
-                below. None of these identify you or follow you to other sites.
+                choice and your light or dark theme, and the waitlist form&apos;s bot check is
+                covered below. None of these identify you or follow you to other sites.
               </li>
               <li>
                 <strong>Analytics, only if you accept.</strong> Google Analytics records the pages
@@ -76,7 +76,7 @@ export default function PrivacyPage() {
           <li>
             <strong>Map data.</strong> Paths, streams, lakes, land cover, and trail routes are ©{' '}
             <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>,
-            available under the Open Database License.
+            available under the Open Database License (ODbL).
           </li>
           <li>
             <strong>Terrain.</strong> Contours, hillshade, and elevation profiles come from the
@@ -93,33 +93,33 @@ export default function PrivacyPage() {
             <a href="https://www.openstreetmap.org">OpenStreetMap</a>.
           </li>
           <li>
+            <strong>Disha trail data.</strong> Routes built by Hikaya from OpenStreetMap data are
+            available under the ODbL.
+          </li>
+          <li>
             <strong>Map labels.</strong> Noto Sans, under the SIL Open Font License.
           </li>
         </ul>
         <p>
-          The default Terrain layer is Disha&apos;s own map and loads from Hikaya. If you switch to
-          the OpenFreeMap or OSM Classic layer, your browser loads tiles from that service, which
-          receives your IP address and browser details to send them.
+          If you switch to another map layer, your browser loads its tiles from that layer&apos;s
+          provider, which receives your IP address and browser details to send them.
         </p>
 
         <h2 id="waitlist">The beta waitlist</h2>
         <p>
-          When you join the waitlist, we store your email address and the date you signed up in a
-          database at Cloudflare and post them to our team in Slack so we can review the sign-up. If
-          we approve it, Postmark sends you one confirmation email. When the beta opens, we use the
-          same address to invite you. The invite comes through Apple's TestFlight, and Apple then
-          handles your address under its own privacy policy.
+          When you join the waitlist, we store your email address and the date you signed up, share
+          them with our team to review the sign-up, and use providers that host and send email for
+          us. When the beta opens, we use the same address to invite you. The invite comes through
+          Apple&apos;s TestFlight, and Apple then handles your address under its own privacy policy.
         </p>
         <p>
           We use the address only for the Disha waitlist and invite, not for a newsletter or
           marketing. To leave the list, reply to any waitlist email.
         </p>
-
-        <h2>The bot check</h2>
         <p>
-          The waitlist form uses Cloudflare Turnstile to block bots. Its script loads when you click
-          into the email field, not when the page opens. Turnstile receives your IP address and
-          browser details to make that check.
+          The waitlist form has a bot check from a security provider. It loads when you click into
+          the email field, not when the page opens, and receives your IP address and browser details
+          to make that check.
         </p>
 
         <h2>Everything else</h2>

@@ -135,15 +135,15 @@ export const MAP_LABELS: Record<MapAvailability, string> = {
 
 /**
  * Registry statuses folded into what a visitor can act on. `published` guides are in the app;
- * `built` ones are made and waiting to ship; `pending` and `blocked` are still to do (blocked
- * means the OpenStreetMap route has gaps). `retired` and no row show nothing.
+ * `built` ones are made and waiting to ship; `pending` ones are still to do. `retired` and no row
+ * show nothing.
  */
 export type GuideAvailability = 'available' | 'soon' | 'planned' | 'none'
 
 export function guideAvailability(guide: string): GuideAvailability {
   if (guide === 'published') return 'available'
   if (guide === 'built') return 'soon'
-  if (guide === 'pending' || guide === 'blocked') return 'planned'
+  if (guide === 'pending') return 'planned'
   return 'none'
 }
 
@@ -154,8 +154,8 @@ export const GUIDE_LABELS: Record<GuideAvailability, string> = {
   none: 'None',
 }
 
-/** A status tag's color: green, yellow, red or gray. */
-export type Tone = 'good' | 'warn' | 'bad' | 'none'
+/** A status tag's color: green, yellow or gray. */
+export type Tone = 'good' | 'warn' | 'none'
 
 /**
  * What a map tag is drawn like: the dot of the trail (teal) or city (pink) it belongs to, or, for
@@ -195,12 +195,11 @@ export function mapBadge(status: MapStatus, mark: Mark = 'any'): Badge {
   return { tone: 'none', label: 'Not yet', short: 'No map yet' }
 }
 
-/** A guide's status as a tag. Blocked is red: its OpenStreetMap route has gaps to fix first. */
+/** A guide's status as a tag. */
 export function guideBadge(guide: string): Badge {
   if (guide === 'published') return { tone: 'good', label: 'Available', short: 'Guide available' }
   if (guide === 'built') return { tone: 'warn', label: 'Coming soon', short: 'Guide coming soon' }
   if (guide === 'pending') return { tone: 'none', label: 'Planned', short: 'Guide planned' }
-  if (guide === 'blocked') return { tone: 'bad', label: 'Blocked', short: 'Guide blocked' }
   return { tone: 'none', label: 'None', short: 'No guide' }
 }
 
@@ -222,7 +221,7 @@ export function mapStage(status: MapStatus): Stage {
 export function guideStage(guide: string): Stage | null {
   if (guide === 'published') return 'available'
   if (guide === 'built') return 'shortlisted'
-  if (guide === 'pending' || guide === 'blocked') return 'popular'
+  if (guide === 'pending') return 'popular'
   return null
 }
 

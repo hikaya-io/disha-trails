@@ -4,8 +4,6 @@ import { pageMetadata } from '@/lib/metadata'
 
 export const metadata = pageMetadata('/terms/')
 
-const REPO = 'https://github.com/hikaya-io/disha-trails'
-
 export default function TermsPage() {
   return (
     <Container className="pt-16 sm:pt-24">
@@ -13,11 +11,11 @@ export default function TermsPage() {
         <h1 className="!mt-0 text-4xl font-extrabold tracking-[-0.04em] text-ink sm:text-5xl">
           Terms of use
         </h1>
-        <p>Last updated November 9, 2026.</p>
+        <p>Last updated November 12, 2026.</p>
         <p>
-          These terms cover this site and the services behind the Disha app: the map tiles and trail
-          guides the app downloads, and the trail files at /data/trails/ on this site. Hikaya runs
-          all of them. By using them, you agree to these terms.
+          These terms cover this site and the services behind the Disha app, including the map
+          tiles, trail guides, and trail data. Hikaya runs all of them. By using them, you agree to
+          these terms.
         </p>
 
         <h2 id="services">Map tiles and guides</h2>
@@ -28,28 +26,19 @@ export default function TermsPage() {
         <ul>
           <li>use them as the map or guide service for another app or website,</li>
           <li>download them in bulk, scrape them, or mirror them,</li>
-          <li>get around the access checks or rate limits on them.</li>
+          <li>get around the limits or checks on them.</li>
         </ul>
         <p>
-          Requests may be rate limited. We may block a client that breaks these terms or puts heavy
-          load on the services, with or without notice.
-        </p>
-        <p>
-          To build on the same data, start from its sources. The base map comes from{' '}
-          <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>, and the site&apos;s
-          code is open on <a href={REPO}>GitHub</a>.
+          We may limit or block a client that breaks these terms or puts heavy load on the services,
+          with or without notice.
         </p>
 
         <h2 id="data">Trail files and licenses</h2>
         <p>
-          You can download the trail files at /data/trails/ and in the{' '}
-          <a href={REPO}>disha-trails repo</a>, one at a time, for your own use and to share. Each
-          file&apos;s license is listed in its{' '}
-          <a href={`${REPO}/blob/main/ATTRIBUTION.md`}>attribution file</a>. Trail data marked ODbL
-          is under the <a href={`${REPO}/blob/main/DATA-LICENSE.md`}>Open Database License</a>, and
-          the site&apos;s code is under the <a href={`${REPO}/blob/main/LICENSE`}>MIT license</a>.
-          The licenses cover the files and code. They give no right to use the hosted services
-          beyond these terms.
+          Trail data that Hikaya publishes is available under the{' '}
+          <a href="https://opendatacommons.org/licenses/odbl/1-0/">Open Database License (ODbL)</a>.
+          The license covers the data only. It gives no right to use the hosted services beyond
+          these terms.
         </p>
         <p>
           Map data is ©{' '}
@@ -74,7 +63,7 @@ export default function TermsPage() {
         <h2 id="contact">Contact</h2>
         <p>
           To ask about these terms or about using the data more widely, contact Hikaya through{' '}
-          <a href="https://hikaya.io">hikaya.io</a>.
+          <a href="https://hikaya.io/contact">hikaya.io</a>.
         </p>
       </article>
     </Container>

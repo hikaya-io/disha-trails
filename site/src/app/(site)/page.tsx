@@ -75,7 +75,7 @@ export default function HomePage() {
                 app, all offline.
               </p>
               <div className="mt-8 flex flex-wrap gap-3">
-                <Button href="/#waitlist">Join the beta waitlist</Button>
+                <Button href="/#waitlist">Join beta waitlist</Button>
                 <Button href="/#how-it-works" variant="secondary">
                   See how it works
                 </Button>
@@ -116,7 +116,7 @@ export default function HomePage() {
         </div>
       </Section>
 
-      <Section id="waitlist" title="Join the beta waitlist">
+      <Section id="waitlist" title="Join beta waitlist">
         <p>
           Disha is in beta on TestFlight for iPhone. Sign up and we'll email an invite when seats
           open.

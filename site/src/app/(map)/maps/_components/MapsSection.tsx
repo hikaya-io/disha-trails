@@ -72,7 +72,7 @@ function placeRow(kind: 'trail' | 'city', place: Trail | City, data: CoverageDat
 }
 
 /** The padding around the panel's text: the site's gutters, tighter from lg to give the list room. */
-const PANEL_PAD = 'px-6 sm:px-8 lg:px-4'
+const PANEL_PAD = 'px-4 sm:px-6 lg:px-4'
 
 /** The panel's right edge from lg, in pixels: its 12px gap from the window and its 26rem. */
 const PANEL_EDGE = 12 + 26 * 16
