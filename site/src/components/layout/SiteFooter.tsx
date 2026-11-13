@@ -64,10 +64,11 @@ export function SiteFooter() {
           </ul>
           <p className="flex items-center gap-x-2 text-faint">
             <span>
-              &copy; {new Date().getFullYear()}{' '}
-              <a href="https://hikaya.io" className="underline hover:text-ink">
+              Made by{' '}
+              <a href="https://hikaya.io/" className="underline hover:text-ink">
                 Hikaya
               </a>
+              , &copy; {new Date().getFullYear()}
             </span>
             <span aria-hidden="true">·</span>
             <a href="#main" className="min-h-8 py-1 underline hover:text-ink pointer-coarse:py-3">

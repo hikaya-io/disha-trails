@@ -52,6 +52,16 @@ export default function HomePage() {
               name: 'Hikaya',
               url: 'https://hikaya.io',
             },
+            {
+              '@type': 'SoftwareApplication',
+              '@id': absoluteUrl('/#app'),
+              name: SITE_NAME,
+              url: absoluteUrl('/'),
+              description: 'An offline hiking navigation app for iPhone.',
+              applicationCategory: 'TravelApplication',
+              operatingSystem: 'iOS 17.5 or later',
+              publisher: { '@id': 'https://hikaya.io/#organization' },
+            },
           ],
         }}
       />
